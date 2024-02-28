@@ -37,8 +37,7 @@ class linked_list {
     node* prv = nullptr;
     bool found = false;
     while (cur != nullptr && !found) {
-      if (cur->roll == roll)
-        found = true;
+      if (cur->roll == roll) found = true;
       else {
         prv = cur;
         cur = cur->next;
