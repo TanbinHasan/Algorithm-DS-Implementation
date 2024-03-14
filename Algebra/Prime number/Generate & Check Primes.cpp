@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const int lim = 10000001;
+const int lim = (int) 1e8 + 1;
 bitset<lim> vis(3);  // n + 1, Safe: 1e7
 vector<int> GenPrime(int n) {
   if (n < 2) return {};
