@@ -23,7 +23,7 @@ vector<int> GenPrime(int n) {
 
 auto prime = GenPrime(lim - 1); // sqrt(n) + 1, Safe: 1e7
 
-/*
+
 vector<pair<int,int>> PrimeFact(int n) {
   vector<pair<int,int>> factors;
   for (auto &i : prime) {
@@ -36,9 +36,9 @@ vector<pair<int,int>> PrimeFact(int n) {
   if (n != 1) factors.push_back({n, 1});
   return factors;
 } 
-*/
 
-vector<int> PrimeFact(int n) {
+
+/* vector<int> PrimeFact(int n) {
   vector<int> factors;
   for (auto &i : prime) {
     if (1LL * i * i > n) break;
@@ -50,7 +50,7 @@ vector<int> PrimeFact(int n) {
   }
   if (n != 1) factors.push_back(n);
   return factors;
-}
+} */
 
 int32_t main(void) {
   ios::sync_with_stdio(false);
@@ -58,8 +58,8 @@ int32_t main(void) {
   int n;
   cin >> n;
   auto factors = PrimeFact(n);
-  for (auto &i : factors) {
-    cout << i << ' ';
+  for (auto &[x, y] : factors) {
+    cout << x << " " << y << "\n";
   }
   return 0;
 }
