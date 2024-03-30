@@ -9,13 +9,14 @@
 
 using namespace std;
 
+template <typename T>
 class linked_list {
   class node {
    public:
-    int roll;
+    T data;
     node* next;
-    node(int roll) {
-      this->roll = roll;
+    node(const T& data) {
+      this->data = data;
       this->next = nullptr;
     }
   };
@@ -23,22 +24,22 @@ class linked_list {
  public:
   linked_list() { head = nullptr; }
 
-  void push(int roll) {
+  void push(const T& data) {
     if (head == nullptr) {  // if the list is empty
-      head = new node(roll);
+      head = new node(data);
       return;
     }
     node* cur = head;
     while (cur->next != nullptr) cur = cur->next;
-    cur->next = new node(roll);  // link the last node with newnode
+    cur->next = new node(data);  // link the last node with newnode
   }
 
-  void erase(int roll) {
+  void erase(const T& data) {
     node* cur = head;
     node* prv = nullptr;
     bool found;
     while (cur != nullptr && !found) {
-      if (cur->roll == roll) found = true;
+      if (cur->data == data) found = true;
       else {
         prv = cur;
         cur = cur->next;
@@ -55,15 +56,15 @@ class linked_list {
     }
   }
 
-  void insert(int after, int roll) {
+  void insert(const T& after, const T& data) {
     node* cur = head;
     bool found;
     while (cur != nullptr && !found) {
-      if (cur->roll == after) found = true;
+      if (cur->data == after) found = true;
       else cur = cur->next;
     }
     if (!found) return;
-    node* new_node = new node(roll);
+    node* new_node = new node(data);
     new_node->next = cur->next;
     cur->next = new_node;
   }
@@ -71,16 +72,17 @@ class linked_list {
   void print() {
     node* cur = head;
     while (cur != nullptr) {
-      cout << cur->roll << " ";
+      cout << cur->data << " ";
       cur = cur->next;
     }
+    cout << '\n';
   }
 };
 
 int32_t main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  linked_list l;
+  linked_list<int> l;
   l.push(1);
   l.push(2);
   l.push(69);
@@ -89,5 +91,13 @@ int32_t main(void) {
   l.push(666);
   l.insert(69, 425);
   l.print();
+  linked_list<string> ls;
+  ls.push("Rumu");
+  ls.push("Ador");
+  ls.push("Habib");
+  ls.erase("Habiba");
+  ls.push("Efti");
+  ls.insert("Habib", "baal");
+  ls.print();
   return 0;
 }
