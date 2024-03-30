@@ -1,6 +1,6 @@
 /**
  *    author:  BlackIce666
- *    created: 05.01.2024 18:24:09
+ *    created: 30.03.2024 17:05:46
  **/
 #include <bits/stdc++.h>
 
@@ -9,13 +9,14 @@
 
 using namespace std;
 
+template <typename T>
 class linked_list {
   class node {
    public:
-    int roll;
+    T data;
     node *next, *prev;
-    node(int roll) {
-      this->roll = roll;
+    node(const T& data) {
+      this->data = data;
       this->next = nullptr;
       this->prev = nullptr;
     }
@@ -25,8 +26,8 @@ class linked_list {
  public:
   linked_list() { head = tail = nullptr; }
 
-  void push(int roll) {
-    node* new_node = new node(roll);
+  void push(const T& data) {
+    node* new_node = new node(data);
     if (head == nullptr) {  // if the list is empty
       head = tail = new_node;
       return;
@@ -36,11 +37,11 @@ class linked_list {
     tail = new_node;        // update the tail to the new last node
   }
 
-  void erase(int roll) {
+  void erase(const T& data) {
     node* cur = head;
     bool found;
     while (cur != nullptr && !found) {
-      if (cur->roll == roll) found = true;
+      if (cur->data == data) found = true;
       else cur = cur->next;
     }
     if (!found) return;
@@ -59,15 +60,15 @@ class linked_list {
     delete (cur);
   }
 
-  void insert(int after, int roll) {
+  void insert(const T& after, const T& data) {
     node* cur = head;
     bool found;
     while (cur != nullptr && !found) {
-      if (cur->roll == after) found = true;
+      if (cur->data == after) found = true;
       else cur = cur->next;
     }
     if (!found) return;
-    node* new_node = new node(roll);
+    node* new_node = new node(data);
     new_node->next = cur->next;  // Link the new node to the next node
     new_node->prev = cur;        // Link the new node to the current node
     if (cur == tail) tail = new_node;  // Update the tail pointer
@@ -78,7 +79,7 @@ class linked_list {
   void print() {
     node* cur = head;
     while (cur != nullptr) {
-      cout << cur->roll << " ";
+      cout << cur->data << " ";
       cur = cur->next;
     }
     cout << '\n';
@@ -86,7 +87,7 @@ class linked_list {
   void reverseprint() {
     node* cur = tail;
     while (cur != nullptr) {
-      cout << cur->roll << " ";
+      cout << cur->data << " ";
       cur = cur->prev;
     }
     cout << '\n';
@@ -97,7 +98,7 @@ class linked_list {
 int32_t main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  linked_list l;
+  linked_list<int> l;
   l.push(1);
   l.push(2);
   l.push(69);
@@ -107,5 +108,14 @@ int32_t main(void) {
   l.insert(69, 425);
   l.print();
   l.reverseprint();
+  linked_list<string> ls;
+  ls.push("Rumu");
+  ls.push("Ador");
+  ls.push("Habib");
+  ls.erase("Habiba");
+  ls.push("Efti");
+  ls.insert("Habib", "baal");
+  ls.print();
+  ls.reverseprint();
   return 0;
 }
