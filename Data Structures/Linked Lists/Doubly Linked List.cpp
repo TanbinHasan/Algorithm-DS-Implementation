@@ -84,6 +84,7 @@ class linked_list {
     }
     cout << '\n';
   }
+  
   void reverseprint() {
     node* cur = tail;
     while (cur != nullptr) {
