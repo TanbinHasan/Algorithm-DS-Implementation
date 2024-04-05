@@ -1,45 +1,81 @@
+/**
+ *    author:  BlackIce666
+ *    created: 04.04.2024 23:03:19
+ **/
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
+
+#define int long long
 
 using namespace std;
-using namespace __gnu_pbds;
 
 class Trie {
+  class node {
+   public:
+    bool endmark;
+    int cnt;
+    vector<node*> next;
+    node() {
+      endmark = false;
+      cnt = 0;
+      next = vector<node*>(26, nullptr);
+    }
+  };
+  node* head;
  public:
-  gp_hash_table<char, Trie> child;
-  bool ok = false;
-  int cnt = 0;
-  void insert(const string& s, int pos = 0) {
-    if (pos == (int)s.size()) {
-      ok = true;
-      ++cnt;
-      return;
+  Trie() { head = new node(); }
+  void insert(string s) {
+    node* cur = head;
+    for (auto& i : s) {
+      int ch = tolower(i) - 'a';
+      if (cur->next[ch] == nullptr) cur->next[ch] = new node();
+      cur = cur->next[ch];
+      ++cur->cnt;
     }
-    child[s[pos]].insert(s, pos + 1);
+    cur->endmark = true;
   }
-  int freq(const string& s, int pos = 0) {
-    if (pos == (int)s.size()) return cnt;
-    if (child.find(s[pos]) == (child).end()) return 0;
-    return child[s[pos]].freq(s, pos + 1);
-  }
-  void erase(const string& s, int pos = 0) {
-    if (pos == (int)s.size()) {
-      if (--cnt == 0) ok = false;
-      return;
+
+  bool find(string s) {
+    node* cur = head;
+    for (auto& i : s) {
+      int ch = tolower(i) - 'a';
+      if (cur->next[ch] == nullptr) return false;
+      cur = cur->next[ch];
     }
-    if (child.find(s[pos]) == (child).end()) return;
-    child[s[pos]].erase(s, pos + 1);
-    if (child[s[pos]].child.empty() && !child[s[pos]].ok) child.erase(s[pos]);
+    return cur->endmark;
+  }
+
+  void erase(string s) {
+    if (!find(s)) return;
+    node* cur = head;
+    for (auto& i : s) {
+      int ch = tolower(i) - 'a';
+      cur = cur->next[ch];
+      --cur->cnt;
+    }
+    if (!cur->cnt) cur->endmark = false;
+  }
+
+  vector<int> frequency(string s) {
+    node* cur = head;
+    int n = (int)s.size();
+    vector<int> v(n);
+    for (int i = 0; i < n; ++i) {
+      int ch = tolower(s[i]) - 'a';
+      if (cur->next[ch] == nullptr) break;
+      cur = cur->next[ch];
+      v[i] = cur->cnt;
+    }
+    return v;
   }
 };
 
-int main(void) {
+int32_t main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   Trie trie;
   trie.insert("apple");
   trie.insert("apple");
+  trie.insert("app");
   trie.insert("banana");
   trie.insert("banana");
   trie.insert("banana");
@@ -55,9 +91,30 @@ int main(void) {
   trie.insert("cat");
   trie.insert("cat");
   trie.erase("banana");
-  cout << "Frequency of \"apple\": " << trie.freq("apple") << '\n';
-  cout << "Frequency of \"banana\": " << trie.freq("banana") << '\n';
-  cout << "Frequency of \"cat\": " << trie.freq("cat") << '\n';
-  cout << "Frequency of \"dog\": " << trie.freq("dog") << '\n';
+  trie.erase("banana");
+  trie.erase("banana");
+  cout << "apple: " << trie.find("apple") << '\n';
+  for (auto& i : trie.frequency("apple")) {
+    cout << i << " ";
+  }
+  cout << '\n';
+
+  cout << "banana: " << trie.find("banana") << '\n';
+  for (auto& i : trie.frequency("banana")) {
+    cout << i << " ";
+  }
+  cout << '\n';
+
+  cout << "cat: " << trie.find("cat") << '\n';
+  for (auto& i : trie.frequency("cat")) {
+    cout << i << " ";
+  }
+  cout << '\n';
+
+  cout << "dog: " << trie.find("dog") << '\n';
+  for (auto& i : trie.frequency("dog")) {
+    cout << i << " ";
+  }
+  cout << '\n';
   return 0;
 }
