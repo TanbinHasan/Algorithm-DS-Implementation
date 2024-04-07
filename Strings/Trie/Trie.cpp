@@ -13,38 +13,43 @@ class Trie {
    public:
     bool endmark;
     int cnt;
-    vector<node*> next;
+    node* next[26] = {};
     node() {
       endmark = false;
       cnt = 0;
-      next = vector<node*>(26, nullptr);
     }
   };
   node* head;
+  void destroy(node* cur) {
+    if (!cur) return;
+    for (auto nxt : cur->next) destroy(nxt);
+    delete (cur);
+  }
  public:
   Trie() { head = new node(); }
-  void insert(string s) {
+  ~Trie() { destroy(head); }
+  void insert(string& s) {
     node* cur = head;
     for (auto& i : s) {
       int ch = tolower(i) - 'a';
-      if (cur->next[ch] == nullptr) cur->next[ch] = new node();
+      if (!cur->next[ch]) cur->next[ch] = new node();
       cur = cur->next[ch];
       ++cur->cnt;
     }
     cur->endmark = true;
   }
 
-  bool find(string s) {
+  bool find(string& s) {
     node* cur = head;
     for (auto& i : s) {
       int ch = tolower(i) - 'a';
-      if (cur->next[ch] == nullptr) return false;
+      if (!cur->next[ch]) return false; // if null pointer
       cur = cur->next[ch];
     }
     return cur->endmark;
   }
 
-  void erase(string s) {
+  void erase(string& s) {
     if (!find(s)) return;
     node* cur = head;
     for (auto& i : s) {
@@ -55,13 +60,13 @@ class Trie {
     if (!cur->cnt) cur->endmark = false;
   }
 
-  vector<int> frequency(string s) {
+  vector<int> frequency(string& s) {
     node* cur = head;
     int n = (int)s.size();
     vector<int> v(n);
     for (int i = 0; i < n; ++i) {
       int ch = tolower(s[i]) - 'a';
-      if (cur->next[ch] == nullptr) break;
+      if (!cur->next[ch]) break;
       cur = cur->next[ch];
       v[i] = cur->cnt;
     }
