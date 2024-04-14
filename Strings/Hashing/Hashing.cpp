@@ -1,104 +1,82 @@
 #include <bits/stdc++.h>
 
+#define int long long
+
 using namespace std;
 
-const int lim = (int)1e5 + 5;  // n + 1
-const int b1 = 137, b2 = 277;
-const int md1 = 998244353, md2 = 1000000007;
-vector<int> p0(lim), p1(lim), ip0(lim), ip1(lim);
+const int32_t LIM = (int)1e6 + 1;  // b + 1
+using T = array<int32_t, 2>;
+const T mod = {127657753, 987654319};
+const T B = {137, 277};
+T pw[LIM], ipw[LIM];
 bool iscalc;
+T operator+(T a, T b) { return {(a[0] + b[0]) % mod[0], (a[1] + b[1]) % mod[1]}; }
+T operator-(T a, T b) { return {(a[0] - b[0] + mod[0]) % mod[0], (a[1] - b[1] + mod[1]) % mod[1]}; }
+T operator*(T a, T b) { return {(int32_t)(1LL * a[0] * b[0] % mod[0]), (int32_t)(1LL * a[1] * b[1] % mod[1])}; }
 
-int BigMod(int b, int p, int md) {
-  b %= md;
-  int res = 1;
+int32_t power(int b, int p, int mod) {
+  b %= mod;
+  if (b < 0) b += mod;
+  int32_t res = 1;
   while (p) {
-    if (p & 1) res = (1LL * (res % md) * (b % md)) % md;
-    b = (1LL * (b % md) * (b % md)) % md;
+    if (p & 1) res = (1LL * (res % mod) * (b % mod)) % mod;
+    b = (1LL * (b % mod) * (b % mod)) % mod;
     p >>= 1;
   }
   return res;
 }
 
 class Hashing {
- public:
-  bool PreCalcBase(void) {
-    p0[0] = p1[0] = ip0[0] = ip1[0] = 1;
-    int ib1 = BigMod(b1, md1 - 2, md1);
-    int ib2 = BigMod(b2, md2 - 2, md2);
-    for (int i = 1; i < lim; ++i) {
-      p0[i] = (1LL * p0[i - 1] * b1) % md1;
-      p1[i] = (1LL * p1[i - 1] * b2) % md2;
-      ip0[i] = (1LL * ip0[i - 1] * ib1) % md1;
-      ip1[i] = (1LL * ip1[i - 1] * ib2) % md2;
+  bool PreCalc(void) {
+    T iB = {power(B[0], mod[0] - 2, mod[0]), power(B[1], mod[1] - 2, mod[1])};
+    pw[0] = ipw[0] = {1, 1};
+    for (int i = 1; i < LIM; ++i) {
+      pw[i] = pw[i - 1] * B;
+      ipw[i] = ipw[i - 1] * iB;
     }
     return true;
   }
+  array<T, 2> f(char c, int i) {
+    T a = {(int32_t)(1LL * c * pw[i][0] % mod[0]), (int32_t)(1LL * c * pw[i][1] % mod[1])};
+    T b = {(int32_t)(1LL * c * pw[n - 1 - i][0] % mod[0]), (int32_t)(1LL * c * pw[n - 1 - i][1] % mod[1])};
+    return {a, b};
+  }
   int n;
-  vector<int> h0, h1, rh0, rh1;
+  vector<array<T, 2>> h;  // (normal, rev) hash
+ public:
   Hashing(string s) {
-    if (!iscalc) iscalc = PreCalcBase();
+    if (!iscalc) iscalc = PreCalc();
     n = (int)s.size();
-    h0 = h1 = rh0 = rh1 = vector<int>(n);
-    array<int, 2> prv1 = {0, 0}, prv2 = {0, 0};
+    h.resize(n);
     for (int i = 0; i < n; ++i) {
-      h0[i] = (1LL * (s[i] - 'A' + 1) * p0[i] + prv1[0]) % md1;
-      h1[i] = (1LL * (s[i] - 'A' + 1) * p1[i] + prv1[1]) % md2;
-      rh0[i] = (1LL * (s[i] - 'A' + 1) * p0[n - 1 - i] + prv2[0]) % md1;
-      rh1[i] = (1LL * (s[i] - 'A' + 1) * p1[n - 1 - i] + prv2[1]) % md2;
-      prv1 = {h0[i], h1[i]}, prv2 = {rh0[i], rh1[i]};
+      auto [a, b] = f(s[i], i);
+      h[i][0] = a + (i == 0 ? (T){0, 0} : h[i - 1][0]);
+      h[i][1] = b + (i == 0 ? (T){0, 0} : h[i - 1][1]);
     }
   }
-  array<int, 2> get_h(int l, int r) {
-    array<int, 2> prv;
-    if (l == 0) prv = {0, 0};
-    else prv = {h0[l - 1], h1[l - 1]};
-    int x = (1LL * (h0[r] - prv[0] + md1) * ip0[l]) % md1;
-    int y = (1LL * (h1[r] - prv[1] + md2) * ip1[l]) % md2;
-    return {x, y};
+  T get_h(int l, int r) {
+    T x = h[r][0] - (l == 0 ? (T){0, 0} : h[l - 1][0]);
+    return x * ipw[l];
   }
-  array<int, 2> get_rh(int l, int r) {
-    array<int, 2> prv;
-    if (l == 0) prv = {0, 0};
-    else prv = {rh0[l - 1], rh1[l - 1]};
-    int x = (1LL * (rh0[r] - prv[0] + md1) * ip0[n - 1 - r]) % md1;
-    int y = (1LL * (rh1[r] - prv[1] + md2) * ip1[n - 1 - r]) % md2;
-    return {x, y};
+  T get_rh(int l, int r) {
+    T x = h[r][1] - (l == 0 ? (T){0, 0} : h[l - 1][1]);
+    return x * ipw[n - 1 - r];
   }
 };
 
-int main(void) {
+int32_t main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int n;
-  cin >> n;
-  string a, b;
-  cin >> a >> b;
-  Hashing ha(a);
-  Hashing hb(b);
-  int l = 1, r = n;
-  array<int, 3> ans;
-  while (l <= r) {
-    int m = l + (r - l) / 2LL;
-    map<array<int, 2>, int> cnt1;
-    set<array<int, 2>> has;
-    array<int, 3> cur = {-1, -1, -1};
-    for (int i = 0; i + m - 1 < n; ++i) {
-      auto x = ha.get_h(i, i + m - 1);
-      has.insert(x);
-    }
-    for (int i = 0; i + m - 1 < n; ++i) {
-      auto x = hb.get_h(i, i + m - 1);
-      if (has.count(x)) {
-        cur = {1, i, m};
-        break;
-      }
-    }
-    if (cur[0] != -1) {
-      ans = cur;
-      l = m + 1;
-    } else r = m - 1;
+  string s, t;
+  cin >> s >> t;
+  auto ht = Hashing(t).get_h(0, (int)t.size() - 1);
+  Hashing h(s);
+  int n = (int)s.size(), m = (int)t.size();
+  int ans = 0;
+  for (int i = 0; i + m - 1 < n; ++i) {
+    auto cur = h.get_h(i, i + m - 1);
+    if (cur == ht) ++ans;
   }
-  if (ans[0] == 1) cout << b.substr(ans[1], ans[2]);
-  cout << '\n';
+  cout << ans << '\n';
   return 0;
 }
