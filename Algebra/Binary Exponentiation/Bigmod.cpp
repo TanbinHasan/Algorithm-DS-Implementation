@@ -9,6 +9,7 @@ using namespace std;
 // For Mod Inverse: BigMod(n , md - 2 , md)
 int BigMod(int b, int p, int md) {
   b %= md;
+  if (b < 0) b += md;
   int res = 1;
   while (p) {
     if (p & 1) res = (1LL * (res % md) * (b % md)) % md;
