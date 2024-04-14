@@ -28,10 +28,13 @@ class Trie {
  public:
   Trie() { head = new node(); }
   ~Trie() { destroy(head); }
-  void insert(string& s) {
+
+  int32_t cval(char ch) { return ch - 'a'; }
+
+  void insert(string s) {
     node* cur = head;
     for (auto& i : s) {
-      int ch = tolower(i) - 'a';
+      int ch = cval(i);
       if (!cur->next[ch]) cur->next[ch] = new node();
       cur = cur->next[ch];
       ++cur->cnt;
@@ -39,33 +42,33 @@ class Trie {
     cur->endmark = true;
   }
 
-  bool find(string& s) {
+  bool find(string s) {
     node* cur = head;
     for (auto& i : s) {
-      int ch = tolower(i) - 'a';
+      int ch = cval(i);
       if (!cur->next[ch]) return false; // if null pointer
       cur = cur->next[ch];
     }
     return cur->endmark;
   }
 
-  void erase(string& s) {
+  void erase(string s) {
     if (!find(s)) return;
     node* cur = head;
     for (auto& i : s) {
-      int ch = tolower(i) - 'a';
+      int ch = cval(i);
       cur = cur->next[ch];
       --cur->cnt;
     }
     if (!cur->cnt) cur->endmark = false;
   }
 
-  vector<int> frequency(string& s) {
+  vector<int> frequency(string s) {
     node* cur = head;
     int n = (int)s.size();
     vector<int> v(n);
     for (int i = 0; i < n; ++i) {
-      int ch = tolower(s[i]) - 'a';
+      int ch = cval(s[i]);
       if (!cur->next[ch]) break;
       cur = cur->next[ch];
       v[i] = cur->cnt;
