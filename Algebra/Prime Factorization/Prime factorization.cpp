@@ -23,7 +23,6 @@ vector<int> GenPrime(int n) {
 
 auto prime = GenPrime(lim - 1); // sqrt(n) + 1, Safe: 1e7
 
-
 vector<pair<int,int>> PrimeFact(int n) {
   vector<pair<int,int>> factors;
   for (auto &i : prime) {
