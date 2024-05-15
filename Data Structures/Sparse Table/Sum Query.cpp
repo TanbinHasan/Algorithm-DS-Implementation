@@ -9,8 +9,8 @@
 using namespace std;
 
 class SparseTable {
- public:
   vector<vector<int>> mat;
+ public:
   SparseTable(vector<int> &ar) {
     int n = (int)ar.size();
     int pw = __lg(n);
