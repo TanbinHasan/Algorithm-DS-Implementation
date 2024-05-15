@@ -18,21 +18,6 @@ int MaxValue(int n, int pos, int x) {
   return val[pos][x] = max(opt1, opt2);
 }
 
-#ifdef Alternative1
-vector<pair<int,int>> vp;
-vector<vector<int>> val(2001, vector<int>(2001));
-
-int MaxValue(int n, int w) {
-  if (w < 0) return INT_MIN;
-  if (n == 0 || w == 0) return 0;
-  int &ret = val[n][w];
-  if (ret != -1) return ret;
-  int opt1 = MaxValue(n - 1, w - vp[n].first) + vp[n].second;
-  int opt2 = MaxValue(n - 1, w);
-  return ret = max(opt1, opt2);
-}
-#endif
-
 #ifdef Iterative
 int f(vector<pair<int, int>>& vp, int sz, int m) {
   vector<vector<int>> dp(sz + 1, vector<int>(m + 1));
