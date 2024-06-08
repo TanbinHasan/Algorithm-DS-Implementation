@@ -10,14 +10,14 @@
 
 using namespace std;
 
-vector<pair<int, int>> FinishTasks(vector<pair<int, int>> &ar, int n) {
-  sort(ar.begin(), ar.end());
-  vector<pair<int, int>> ans = {{ar[0].second, ar[0].first}};
+vector<pair<int, int>> FinishTasks(vector<pair<int, int>> &a, int n) {
+  sort(a.begin(), a.end());
+  vector<pair<int, int>> ans = {{a[0].second, a[0].first}};
   int cur = 0;
   for (int i = 1; i < n; ++i) {
-    if (ar[i].second > ar[cur].first) {
+    if (a[i].second > a[cur].first) {
       cur = i;
-      ans.emplace_back(ar[i].second, ar[i].first);
+      ans.emplace_back(a[i].second, a[i].first);
     }
   }
   return ans;

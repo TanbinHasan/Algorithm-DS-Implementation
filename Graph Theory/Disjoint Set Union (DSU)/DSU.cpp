@@ -1,7 +1,4 @@
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
 
 class DSU {
@@ -12,34 +9,34 @@ class DSU {
     size = vector<int>(n, 1);
   }
   // get representive of the component
-  int get(int x) {
-    while (par[x] != x) x = par[x];
-    return x;
+  int get(int u) {
+    while (par[u] != u) u = par[u];
+    return u;
   }
-  bool same(int x, int y) { return get(x) == get(y); }
-  bool unite(int x, int y) {
-    x = get(x);
-    y = get(y);
-    if (x == y) return false;
-    if (size[x] < size[y]) swap(x, y);
-    size[x] += size[y];
-    par[y] = x;
+  bool same(int u, int v) { return get(u) == get(v); }
+  bool unite(int u, int v) {
+    u = get(u);
+    v = get(v);
+    if (u == v) return false;
+    if (size[u] < size[v]) swap(u, v);
+    size[u] += size[v];
+    par[v] = u;
     return true;
   }
 };
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   int n, q;
   cin >> n >> q;
   DSU dsu(n);
   while (q--) {
-    int type, x, y;
-    cin >> type >> x >> y;
-    --x, --y;
-    if (type == 0) dsu.unite(x, y);
-    else cout << dsu.same(x, y) << '\n';
+    int type, u, v;
+    cin >> type >> u >> v;
+    --u, --v;
+    if (type == 0) dsu.unite(u, v);
+    else cout << dsu.same(u, v) << '\n';
   }
   return 0;
 }

@@ -1,6 +1,6 @@
 /**
- *    author:  Tanbin_Hasan
- *    created: 28.05.2024 03:04:55
+ *    author:  BlackIce666
+ *    created: 28.05.2024 03:02:47
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -8,25 +8,22 @@ using namespace std;
 class Graph {
   int n;
   vector<vector<int>> g;
-  vector<bool> vis, col;
+  vector<bool> vis;
  public:
   Graph(int _n) {
     n = _n;
     g.resize(n);
     vis.resize(n);
-    col.resize(n);
   }
   void add(int u, int v) { g[u].push_back(v); }
 
-  bool bipartite(int u, int c) {
+  void dfs(int u) {
+    // cout << u << " ";
     vis[u] = 1;
-    col[u] = c;
     for (auto v : g[u]) {
-      if (!vis[v]) {
-        if (!bipartite(v, !c)) return false;
-      } else if (col[v] == col[u]) return false;
+      if (vis[v]) continue;
+      dfs(v);
     }
-    return true;
   }
 };
 
@@ -41,6 +38,6 @@ int main(void) {
     cin >> u >> v;
     g.add(u, v), g.add(v, u);
   }
-  cout << ((g.bipartite(1, 0)) ? ("Bipartite") : ("Not Bipartite")) << '\n';
+  g.dfs(1);
   return 0;
 }

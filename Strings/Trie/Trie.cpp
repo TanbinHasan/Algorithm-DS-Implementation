@@ -3,10 +3,9 @@
  *    created: 04.04.2024 23:03:19
  **/
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
+
+typedef long long int i64;
 
 class Trie {
   class node {
@@ -29,7 +28,7 @@ class Trie {
   Trie() { head = new node(); }
   ~Trie() { destroy(head); }
 
-  int32_t cval(char ch) { return ch - 'a'; }
+  int cval(char ch) { return ch - 'a'; }
 
   void insert(string s) {
     node* cur = head;
@@ -77,7 +76,7 @@ class Trie {
   }
 };
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   Trie trie;

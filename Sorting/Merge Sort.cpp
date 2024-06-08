@@ -1,26 +1,25 @@
 /**
  *    Author  : Tanbin_Hasan
  *    Created : 25.12.2020
-**/
-
-#include <iostream>
-#include <vector>
-
+ **/
+#include <bits/stdc++.h>
 using namespace std;
 
-vector<int64_t> temp((int)1e7); // n + 1
-void MergeSort(vector<int64_t> &ar, int low, int high) {
+typedef long long i64;
+
+vector<int> t((int)1e7);  // n + 1, temporary array
+void MergeSort(vector<int> &a, int low, int high) {
   if (low == high) return;
   int mid = low + (high - low) / 2;
-  MergeSort(ar, low, mid);
-  MergeSort(ar, mid + 1, high);
+  MergeSort(a, low, mid);
+  MergeSort(a, mid + 1, high);
   for (int l = low, r = mid + 1, i = low; i <= high; ++i) {
-    if (l == mid + 1) temp[i] = ar[r++];
-    else if (r == high + 1) temp[i] = ar[l++];
-    else if (ar[l] < ar[r]) temp[i] = ar[l++];
-    else temp[i] = ar[r++];
+    if (l == mid + 1) t[i] = a[r++];
+    else if (r == high + 1) t[i] = a[l++];
+    else if (a[l] < a[r]) t[i] = a[l++];
+    else t[i] = a[r++];
   }
-  for (int i = low; i <= high; ++i) ar[i] = temp[i];
+  for (int i = low; i <= high; ++i) a[i] = t[i];
 }
 
 int main(void) {
@@ -28,12 +27,12 @@ int main(void) {
   cin.tie(0);
   int n;
   cin >> n;
-  vector<int64_t> ar(n);
-  for (auto &i : ar) {
+  vector<int> a(n);
+  for (auto &i : a) {
     cin >> i;
   }
-  MergeSort(ar, 0, n - 1);
-  for (auto &i : ar) {
+  MergeSort(a, 0, n - 1);
+  for (auto &i : a) {
     cout << i << ' ';
   }
   return 0;

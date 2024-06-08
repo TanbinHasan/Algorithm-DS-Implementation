@@ -1,75 +1,74 @@
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
 
-const int32_t LIM = (int)2e5 + 1;  // b + 1
-using T = array<int32_t, 2>;
-const T mod = {127657753, 987654319};
-const T B = {137, 277};
-T pw[LIM], ipw[LIM];
-bool iscalc;
-T operator+(T a, T b) { return {(a[0] + b[0]) % mod[0], (a[1] + b[1]) % mod[1]}; }
-T operator-(T a, T b) { return {(a[0] - b[0] + mod[0]) % mod[0], (a[1] - b[1] + mod[1]) % mod[1]}; }
-T operator*(T a, T b) { return {(int32_t)(1LL * a[0] * b[0] % mod[0]), (int32_t)(1LL * a[1] * b[1] % mod[1])}; }
+typedef long long i64;
 
-int32_t power(int b, int p, int mod) {
+const int MX = (int)2e5 + 3; // n + 1
+using H = array<int, 2>;
+using HH = array<H, 2>;
+const H MOD = {127657753, 987654319};
+const H B = {137, 277};
+H P[MX], IP[MX];
+bool ISCALC;
+
+H operator+(H a, H b) { return {(a[0] + b[0]) % MOD[0], (a[1] + b[1]) % MOD[1]}; }
+HH operator+(HH a, HH b) { return {a[0] + b[0], a[1] + b[1]}; }
+H operator-(H a, H b) { return {(a[0] - b[0] + MOD[0]) % MOD[0], (a[1] - b[1] + MOD[1]) % MOD[1]}; }
+H operator*(H a, H b) { return {(int)(1LL * a[0] * b[0] % MOD[0]), (int)(1LL * a[1] * b[1] % MOD[1])}; }
+H operator*(H a, int b) { return {(int)(1LL * a[0] * b % MOD[0]), (int)(1LL * a[1] * b % MOD[1])}; }
+
+int power(int b, int p, int mod) {
   b %= mod;
   if (b < 0) b += mod;
-  int32_t res = 1;
+  int r = 1;
   while (p) {
-    if (p & 1) res = (1LL * (res % mod) * (b % mod)) % mod;
+    if (p & 1) r = (1LL * (r % mod) * (b % mod)) % mod;
     b = (1LL * (b % mod) * (b % mod)) % mod;
     p >>= 1;
   }
-  return res;
+  return r;
 }
 
 class Hashing {
-  bool PreCalc(void) {
-    T iB = {power(B[0], mod[0] - 2, mod[0]), power(B[1], mod[1] - 2, mod[1])};
-    pw[0] = ipw[0] = {1, 1};
-    for (int i = 1; i < LIM; ++i) {
-      pw[i] = pw[i - 1] * B;
-      ipw[i] = ipw[i - 1] * iB;
+  bool BasePowerCalculation(void) {
+    H IB = {power(B[0], MOD[0] - 2, MOD[0]), power(B[1], MOD[1] - 2, MOD[1])};
+    P[0] = IP[0] = {1, 1};
+    for (int i = 1; i < MX; ++i) {
+      P[i] = P[i - 1] * B;
+      IP[i] = IP[i - 1] * IB;
     }
     return true;
   }
-  array<T, 2> f(char c, int i) {
-    T a = {(int32_t)(1LL * c * pw[i][0] % mod[0]), (int32_t)(1LL * c * pw[i][1] % mod[1])};
-    T b = {(int32_t)(1LL * c * pw[n - 1 - i][0] % mod[0]), (int32_t)(1LL * c * pw[n - 1 - i][1] % mod[1])};
-    return {a, b};
-  }
-  array<T, 2> merge(array<T, 2> a, array<T, 2> b) { return {a[0] + b[0], a[1] + b[1]}; }
   int n;
-  vector<array<T, 2>> val;  // (normal, rev) hash
+  vector<array<H, 2>> h; // (normal, rev) hash
+  HH CH(char c, int i) { return {P[i] * (int)c, P[n - 1 - i] * (int)c}; } // current hash value
  public:
   Hashing(string s) {
-    if (!iscalc) iscalc = PreCalc();
+    if (!ISCALC) ISCALC = BasePowerCalculation();
     n = (int)s.size();
-    val.resize(2 * n);
-    for (int i = n; i < 2 * n; ++i) val[i] = f(s[i - n], i - n);
-    for (int i = n - 1; i > 0; --i) val[i] = merge(val[i * 2], val[i * 2 + 1]);
+    h.resize(2 * n);
+    for (int i = n; i < 2 * n; ++i) h[i] = CH(s[i - n], i - n);
+    for (int i = n - 1; i > 0; --i) h[i] = h[i * 2] + h[i * 2 + 1];
   }
-  void update(int i, char ch) {
-    for (val[i += n] = f(ch, i); i > 1; i /= 2) val[i / 2] = merge(val[i], val[i ^ 1]);
+  void update(int i, char c) {
+    for (h[i += n] = CH(c, i); i > 1; i /= 2) h[i / 2] = h[i] + h[i ^ 1];
   }
-  array<T, 2> query(int l, int r) {
-    array<T, 2> res = {(T){0, 0}, (T){0, 0}};
+  HH query(int l, int r) {
+    HH res = {(H){0, 0}, (H){0, 0}};
     for (l += n, r += (n + 1); l < r; l /= 2, r /= 2) {
-      if (l & 1) res = merge(res, val[l++]);
-      if (r & 1) res = merge(res, val[--r]);
+      if (l & 1) res = res + h[l++];
+      if (r & 1) res = res + h[--r];
     }
     return res;
   }
-  T get_h(int l, int r) { return query(l, r)[0] * ipw[l]; }
-  T get_rh(int l, int r) { return query(l, r)[1] * ipw[n - 1 - r]; }
+  H get_h(int l, int r) { return query(l, r)[0] * IP[l]; }
+  H get_rh(int l, int r) { return query(l, r)[1] * IP[n - 1 - r]; }
 };
 
-int32_t main(void) {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
+void PreCalculation(void) {}
+
+// #define MultipleCase
+void Solve(int tc) {
   int n, q;
   cin >> n >> q;
   string s;
@@ -96,5 +95,19 @@ int32_t main(void) {
       }
     }
   }
+}
+
+int main(void) {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  PreCalculation();
+  int tt = 1;
+#ifdef MultipleCase
+  cin >> tt;
+#endif
+  for (int tc = 1; tc <= tt; ++tc) {
+    Solve(tc);
+  }
   return 0;
 }
+// https://cses.fi/problemset/task/2420

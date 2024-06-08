@@ -1,58 +1,52 @@
-/**
- *    author:  Tanbin_Hasan
- *    created: 19.12.2021 20:04:08
-**/
+// 06.06.2024 02:20:13
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
 
-vector<int> Dijskstra(vector<vector<pair<int, int>>> &adj, int s, int n) {
-  vector<int> dis(n + 1, numeric_limits<int32_t>::max());
-  dis[s] = 0;
-  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
-  q.push({0, s});
-  while (!q.empty()) {
-    auto [nw, nv] = q.top();
-    q.pop();
-    if (nw != dis[nv]) continue;
-    for (auto &[cv, cw] : adj[nv]) {
-      if (dis[nv] + cw >= dis[cv]) continue;
-      dis[cv] = dis[nv] + cw;
-      q.push({dis[cv], cv});
+class Graph {
+  int n;
+  vector<vector<pair<int, int>>> g; // node, weight
+  vector<int> dis;
+ public:
+  Graph(int _n) {
+    n = _n;
+    g.resize(n);
+    dis.assign(n, numeric_limits<int>::max());
+  }
+  void add(int u, int v, int w) { g[u].push_back({v, w}); }
+
+  vector<int> dijkstra(int s) { // s = source
+    dis[s] = 0;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+    q.push({0, s});
+    while (!q.empty()) {
+      auto [cu, u] = q.top();
+      q.pop();
+      if (cu != dis[u]) continue;
+      for (auto [v, cv] : g[u]) {
+        if (dis[u] + cv >= dis[v]) continue;
+        dis[v] = dis[u] + cv;
+        q.push({dis[v], v});
+      }
     }
+    return dis;
   }
-  return dis;
-}
+};
 
-#define MultipleCase       
-void Solve(__attribute__((unused)) int tc) {
-  cout << "Case " << tc << ": ";
-  int n, m;
-  cin >> n >> m;
-  vector<vector<pair<int,int>>> adj(n + 1);
-  while (m--) {
-    int x, y, w;
-    cin >> x >> y >> w;
-    adj[x].push_back({y, w});
-    adj[y].push_back({x, w});
-  }
-  auto dis = Dijskstra(adj, 1, n);
-  if (dis[n] == numeric_limits<int32_t>::max()) {
-    cout << "Impossible\n";
-    return;
-  }
-  cout << dis[n] << '\n';
-}
-
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int tt = 1, tc = 0;
-#ifdef MultipleCase
-  cin >> tt;
-#endif
-  while (tt--) Solve(++tc);
+  int n, m;
+  cin >> n >> m;
+  Graph g(n); // 0 based
+  while (m--) {
+    int u, v, w;
+    cin >> u >> v >> w;
+    g.add(u, v, w);
+    g.add(v, u, w);
+  }
+  auto dis = g.dijkstra(0); // source = 0
+  for (int i = 0; i < n; ++i) {
+    cout << dis[i] << " \n"[i == n - 1];
+  }
   return 0;
 }

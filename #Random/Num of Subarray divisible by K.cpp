@@ -1,16 +1,17 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int SubCnt(vector<int> &ar, int n, int k) {
+typedef long long int i64;
+
+i64 SubCnt(vector<int> &a, int n, int k) {
   map<int, int> cnt;
-  for (auto &i : ar) {
+  for (auto &i : a) {
     int x = ((i % k) + k) % k;
     ++cnt[x];
   }
-  int ans = cnt[0];
+  i64 ans = cnt[0];
   for (auto &[x, y] : cnt) {
-    ans += (y * (y - 1)) / 2LL;
+    ans += (1LL * y * (y - 1)) / 2LL;
   }
   return ans;
 }

@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-#define int long long
-
 using namespace std;
 
 void merge(vector<vector<int>> &adj, int node) {
@@ -78,7 +76,7 @@ void Solve(__attribute__((unused)) int tc) {
   }
 }
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   int tt = 1, tc = 0;

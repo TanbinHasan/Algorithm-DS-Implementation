@@ -1,25 +1,24 @@
-/**
- *    author:  Tanbin_Hasan
- *    created: 28.05.2024 03:04:55
-**/
 #include <bits/stdc++.h>
 using namespace std;
+
+typedef long long i64;
 
 class Graph {
   int n;
   vector<vector<int>> g;
-  vector<bool> vis, col;
+  vector<int> par;
  public:
+  vector<bool> vis;
   Graph(int _n) {
     n = _n;
     g.resize(n);
     vis.resize(n);
-    col.resize(n);
+    par.assign(n, -1);
   }
   void add(int u, int v) { g[u].push_back(v); }
 
-  bool bipartite(int s) {
-    vis[s] = col[s] = 1;
+  bool iscyclic(int s) {
+    vis[s] = true;
     queue<int> q;
     q.push(s);
     while (!q.empty()) {
@@ -27,27 +26,34 @@ class Graph {
       q.pop();
       for (auto v : g[u]) {
         if (!vis[v]) {
+          vis[v] = true;
+          par[v] = u;
           q.push(v);
-          vis[v] = 1;
-          col[v] = !col[u];
-        } else if (col[v] == col[u]) return false;
+        } else if (par[u] != v) return true;
       }
     }
-    return true;
+    return false;
   }
 };
 
 int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int n, m;
-  cin >> n >> m; // nodes, edges;
-  Graph g(n + 1);
+  int n, m; // nodes, edges
+  cin >> n >> m;
+  Graph g(n);
   while (m--) {
     int u, v;
     cin >> u >> v;
     g.add(u, v), g.add(v, u);
   }
-  cout << ((g.bipartite(1)) ? ("Bipartite") : ("Not Bipartite")) << '\n';
+  for (int i = 0; i < n; ++i) {
+    if (g.vis[i]) continue;
+    if (g.iscyclic(i)) {
+      cout << "Graph contains cycle\n";
+      return 0;
+    }
+  }
+  cout << "Graph doesn't contain any cycle\n";
   return 0;
 }

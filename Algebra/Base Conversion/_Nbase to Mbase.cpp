@@ -3,15 +3,15 @@
  *    created: 26.09.2021 22:59:09
 **/
 #include <bits/stdc++.h>
-
 using namespace std;
 
+typedef unsigned long long int ui64;
+
 string Nbase_to_Mbase(string s, int N, int M) {
-  using ull = unsigned long long;
   reverse(s.begin(), s.end());
-  ull num = 0;
+  ui64 num = 0;
   for (int i = 0; i < (int)s.size(); ++i)
-    num += (ull) powl(N, (long double)i) * (int) (s[i] - '0');
+    num += (ui64) powl(N, 1.0l * i) * (ui64) (s[i] - '0');
   s.clear();
   do {
     s.push_back((num % M) + '0');

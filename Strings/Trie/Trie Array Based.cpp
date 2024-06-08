@@ -3,19 +3,18 @@
  *    created: 10.04.2024 20:39:13
  **/
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
+
+typedef long long int i64;
 
 const int N = 50000; // size of the array
 const int M = 50; // max size/bit of each element of array
 const int K = 26; // total number of characters
 int cval(char ch) { return ch - 'a'; } // Type of characters
-int32_t nexts[N * M][K];
-int32_t cnt[N * M];
+int nexts[N * M][K];
+int cnt[N * M];
 bitset<N * M> endmark;
-int32_t node_cnt;
+int node_cnt;
 
 class Trie {
  public:
@@ -71,7 +70,7 @@ class Trie {
   }
 };
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   Trie trie;

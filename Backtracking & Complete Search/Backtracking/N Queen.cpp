@@ -18,11 +18,11 @@ void BackTrack(int n, int c) {
     return;
   }
   for (int i = 0; i < n; ++i) {
-    if (col[i] || ld[i + c] || rd[i - c + n - 1]) continue;
-    col[i] = ld[i + c] = rd[i - c + n - 1] = true;
+    if (col[i] || ld[i + c] || rd[c - i + n - 1]) continue;
+    col[i] = ld[i + c] = rd[c - i + n - 1] = true;
     v.push_back(i);
     BackTrack(n, c + 1);
-    col[i] = ld[i + c] = rd[i - c + n - 1] = false;
+    col[i] = ld[i + c] = rd[c - i + n - 1] = false;
     v.pop_back();
   }
 }
@@ -46,7 +46,7 @@ int32_t main(void) {
   There are total 2 * n - 1 left diagonal & same number of right diagonal.
   For (i, j) cell,
   it's left diagonal = i + j
-  it's right diagonal = j - i + n - 1
+  it's right diagonal = i - j + n - 1
 
   For n = 4, 
   left diagonal:
