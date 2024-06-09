@@ -1,21 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long i64;
-
-const int MX = (int)2e5 + 3; // n + 1
-using H = array<int, 2>;
+const int MX = (int)1e5 + 1;  // n + 1
+const int K = 3;              // K-Hashing
+using H = array<int, K>;
 using HH = array<H, 2>;
-const H MOD = {127657753, 987654319};
-const H B = {137, 277};
-H P[MX], IP[MX];
+const H MOD = {127657753, 987654319, 1000000007};  // use K moduli
+const H B = {137, 277, 37};                // use K bases
+H P[MX], IP[MX];                       // power of base and inverse bases
 bool ISCALC;
 
-H operator+(H a, H b) { return {(a[0] + b[0]) % MOD[0], (a[1] + b[1]) % MOD[1]}; }
+H operator+(H a, H b) {
+  H res;
+  for (int i = 0; i < K; ++i) res[i] = (a[i] + b[i]) % MOD[i];
+  return res;
+}
+H operator-(H a, H b) {
+  H res;
+  for (int i = 0; i < K; ++i) res[i] = (a[i] - b[i] + MOD[i]) % MOD[i];
+  return res;
+}
+H operator*(H a, H b) {
+  H res;
+  for (int i = 0; i < K; ++i) res[i] = (1LL * a[i] * b[i]) % MOD[i];
+  return res;
+}
+H operator*(H a, int b) {
+  H res;
+  for (int i = 0; i < K; ++i) res[i] = (1LL * a[i] * b) % MOD[i];
+  return res;
+}
 HH operator+(HH a, HH b) { return {a[0] + b[0], a[1] + b[1]}; }
-H operator-(H a, H b) { return {(a[0] - b[0] + MOD[0]) % MOD[0], (a[1] - b[1] + MOD[1]) % MOD[1]}; }
-H operator*(H a, H b) { return {(int)(1LL * a[0] * b[0] % MOD[0]), (int)(1LL * a[1] * b[1] % MOD[1])}; }
-H operator*(H a, int b) { return {(int)(1LL * a[0] * b % MOD[0]), (int)(1LL * a[1] * b % MOD[1])}; }
 
 int power(int b, int p, int mod) {
   b %= mod;
@@ -31,7 +46,8 @@ int power(int b, int p, int mod) {
 
 class Hashing {
   bool BasePowerCalculation(void) {
-    H IB = {power(B[0], MOD[0] - 2, MOD[0]), power(B[1], MOD[1] - 2, MOD[1])};
+    H IB;
+    for (int i = 0; i < K; ++i) IB[i] = power(B[i], MOD[i] - 2, MOD[i]);
     P[0] = IP[0] = {1, 1};
     for (int i = 1; i < MX; ++i) {
       P[i] = P[i - 1] * B;
@@ -40,8 +56,8 @@ class Hashing {
     return true;
   }
   int n;
-  vector<HH> h; // (normal, rev) hash
-  HH CH(char c, int i) { return {P[i] * (int)c, P[n - 1 - i] * (int)c}; } // current hash value
+  vector<HH> h;                                                            // (normal, rev) hash
+  HH CH(char c, int i) { return {P[i] * (int)c, P[n - 1 - i] * (int)c}; }  // current hash value
  public:
   Hashing(string s) {
     if (!ISCALC) ISCALC = BasePowerCalculation();
