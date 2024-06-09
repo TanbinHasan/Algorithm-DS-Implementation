@@ -6,8 +6,8 @@ const int K = 3;              // K-Hashing
 using H = array<int, K>;
 using HH = array<H, 2>;
 const H MOD = {127657753, 987654319, 1000000007};  // use K moduli
-const H B = {137, 277, 37};                // use K bases
-H P[MX], IP[MX];                       // power of base and inverse bases
+const H B = {137, 277, 37};                        // use K bases
+H P[MX], IP[MX];                                   // power of base and inverse bases
 bool ISCALC;
 
 H operator+(H a, H b) {
