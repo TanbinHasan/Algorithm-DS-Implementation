@@ -5,27 +5,27 @@ using namespace std;
 typedef long long i64;
 
 template <int MOD>
-class Modular {
+class Mint {
  public:
   static const int mod = MOD;
   int v;
   explicit operator int() const { return v; }
-  Modular() : v(0) {}
-  Modular(i64 _v) : v(int(_v % MOD)) { v += (v < 0) * MOD; }
-  Modular& operator+=(Modular o) {
+  Mint() : v(0) {}
+  Mint(i64 _v) : v(int(_v % MOD)) { v += (v < 0) * MOD; }
+  Mint& operator+=(Mint o) {
     if ((v += o.v) >= MOD) v -= MOD;
     return *this;
   }
-  Modular& operator-=(Modular o) {
+  Mint& operator-=(Mint o) {
     if ((v -= o.v) < 0) v += MOD;
     return *this;
   }
-  Modular& operator*=(Modular o) {
+  Mint& operator*=(Mint o) {
     v = int(1LL * v * o.v % MOD);
     return *this;
   }
-  friend Modular power(Modular b, i64 p) {
-    Modular res = 1;
+  friend Mint power(Mint b, i64 p) {
+    Mint res = 1;
     while (p > 0) {
       if (p & 1) res *= b;
       b *= b;
@@ -33,16 +33,16 @@ class Modular {
     }
     return res;
   }
-  friend Modular inv(Modular b) {
+  friend Mint inv(Mint b) {
     assert(b.v != 0);
     return power(b, MOD - 2);
   }
-  friend Modular operator+(Modular a, Modular b) { return a += b; }
-  friend Modular operator-(Modular a, Modular b) { return a -= b; }
-  friend Modular operator*(Modular a, Modular b) { return a *= b; }
+  friend Mint operator+(Mint a, Mint b) { return a += b; }
+  friend Mint operator-(Mint a, Mint b) { return a -= b; }
+  friend Mint operator*(Mint a, Mint b) { return a *= b; }
 };
 
-using mi = Modular<998244353>;
+using mi = Mint<998244353>;
 
 void PreCalculation(void) {}
 
