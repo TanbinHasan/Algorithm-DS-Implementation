@@ -6,20 +6,20 @@ using namespace std;
 
 class SparseTable {
  public:
-  vector<vector<vector<int>>> mat;
-  SparseTable(vector<vector<int>> &ar, int n, int m) {
+  vector<vector<vector<int>>> v;
+  SparseTable(vector<vector<int>>& a, int n, int m) {
     int pw = __lg(min(n, m));
-    mat = vector<vector<vector<int>>>(n, vector<vector<int>>(m, vector<int>(pw + 1)));
+    v.resize(n, vector<vector<int>>(m, vector<int>(pw + 1)));
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < m; ++j) {
-        mat[i][j][0] = ar[i][j];
+        v[i][j][0] = a[i][j];
       }
     }
     for (int p = 1; p <= pw; ++p) {
       int x = (1LL << (p - 1));
       for (int i = 0; i + x < n; ++i) {
         for (int j = 0; j + x < m; ++j) {
-          mat[i][j][p] = min({mat[i][j][p - 1], mat[i + x][j][p - 1], mat[i][j + x][p - 1], mat[i + x][j + x][p - 1]});
+          v[i][j][p] = min({v[i][j][p - 1], v[i + x][j][p - 1], v[i][j + x][p - 1], v[i + x][j + x][p - 1]});
         }
       }
     }
@@ -27,8 +27,8 @@ class SparseTable {
   int query(int x1, int y1, int x2, int y2) {
     int k = min(x2 - x1 + 1, y2 - y1 + 1);
     int p = __lg(k);
-    int mn1 = min(mat[x1][y1][p], mat[x2 - (1LL << p) + 1][y2 - (1LL << p) + 1][p]);
-    int mn2 = min(mat[x1][y2 - (1LL << p) + 1][p], mat[x2 - (1LL << p) + 1][y1][p]);
+    int mn1 = min(v[x1][y1][p], v[x2 - (1LL << p) + 1][y2 - (1LL << p) + 1][p]);
+    int mn2 = min(v[x1][y2 - (1LL << p) + 1][p], v[x2 - (1LL << p) + 1][y1][p]);
     return min(mn1, mn2);
   }
 };
