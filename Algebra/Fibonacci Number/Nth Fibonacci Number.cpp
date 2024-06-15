@@ -1,38 +1,63 @@
 #include <bits/stdc++.h>
-
-#define int long long
-#define ll __int128_t
-
 using namespace std;
 
-template <int D, typename T>
-struct Vec : public vector<Vec<D - 1, T>> {
-  static_assert(D >= 1);
-  template <typename... Args>
-  Vec(int n = 0, Args... args) : vector<Vec<D - 1, T>>(n, Vec<D - 1, T>(args...)) {}
+typedef long long i64;
+
+template <int MOD>
+class Mint {
+ public:
+  static const int mod = MOD;
+  int v;
+  explicit operator int() const { return v; }
+  Mint() : v(0) {}
+  Mint(i64 _v) : v(int(_v % MOD)) { v += (v < 0) * MOD; }
+  Mint& operator+=(Mint o) {
+    if ((v += o.v) >= MOD) v -= MOD;
+    return *this;
+  }
+  Mint& operator-=(Mint o) {
+    if ((v -= o.v) < 0) v += MOD;
+    return *this;
+  }
+  Mint& operator*=(Mint o) {
+    v = int(1LL * v * o.v % MOD);
+    return *this;
+  }
+  friend Mint power(Mint b, i64 p) {
+    Mint res = 1;
+    while (p > 0) {
+      if (p & 1) res *= b;
+      b *= b;
+      p >>= 1;
+    }
+    return res;
+  }
+  friend Mint inv(Mint b) {
+    assert(b.v != 0);
+    return power(b, MOD - 2);
+  }
+  friend Mint operator+(Mint a, Mint b) { return a += b; }
+  friend Mint operator-(Mint a, Mint b) { return a -= b; }
+  friend Mint operator*(Mint a, Mint b) { return a *= b; }
 };
-template <typename T>
-struct Vec<1, T> : public vector<T> {
-  Vec(int n = 0, const T& val = T()) : vector<T>(n, val) {}
-};
 
-mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+using mi = Mint<1000000007>;
 
-void PreCalc(void) {}
-
-// #define MultipleCase       
-void Solve(__attribute__((unused)) int tc) {
-  
+pair<mi, mi> Fib(i64 n) {
+  if (!n) return {0, 1};
+  auto [px, py] = Fib(n >> 1);
+  mi x = px * ((mi)2 * py - px);
+  mi y = px * px + py * py;
+  if (n & 1) return {y, x + y};
+  return {x, y};
 }
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  PreCalc();
-  int tt = 1, tc = 0;
-#ifdef MultipleCase
-  cin >> tt;
-#endif
-  while (tt--) Solve(++tc);
+  i64 n;
+  cin >> n;
+  cout << (int)Fib(n).first << '\n';
   return 0;
 }
+// https://codeforces.com/gym/102644/problem/C

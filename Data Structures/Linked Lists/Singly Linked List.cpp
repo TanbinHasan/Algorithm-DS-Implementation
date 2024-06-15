@@ -92,7 +92,6 @@ int32_t main(void) {
   l.insert(69, 425);
   l.print();
   linked_list<string> ls;
-  ls.push("Rumu");
   ls.push("Ador");
   ls.push("Habib");
   ls.erase("Habiba");

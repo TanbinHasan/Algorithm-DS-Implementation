@@ -115,7 +115,7 @@ int32_t main(void) {
   ls.push("Habib");
   ls.erase("Habiba");
   ls.push("Efti");
-  ls.insert("Habib", "baal");
+  ls.insert("Habib", "fotatu");
   ls.print();
   ls.reverseprint();
   return 0;
