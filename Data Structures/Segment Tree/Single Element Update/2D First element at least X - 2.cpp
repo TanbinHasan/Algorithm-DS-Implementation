@@ -33,14 +33,15 @@ class SegmentTree {
   }
   void update(int p, int val) { update(1, 0, n - 1, p, val); }
 
-  T first_above(int x, int u, int l, int r) {
-    if (t[u] < x) return -1LL;
-    if (l == r) return l;
+  T first_above(int x, int ind, int u, int l, int r) {
+    if (t[u] < x || ind > r) return -1;
+    if (l == r) return (l >= ind) ? l : -1;
     int m = l + (r - l) / 2LL;
-    if (t[u << 1] >= x) return first_above(x, u << 1, l, m);
-    return first_above(x, u << 1 | 1, m + 1, r);
+    T res = first_above(x, ind, u << 1, l, m);
+    if (res == -1) return first_above(x, ind, u << 1 | 1, m + 1, r);
+    return res;
   }
-  T first_above(int k) { return first_above(k, 1, 0, n - 1); }
+  T first_above(int x, int ind) { return first_above(x, ind, 1, 0, n - 1); }
 };
 
 int main(void) {
@@ -61,9 +62,9 @@ int main(void) {
       cin >> i >> v;
       st.update(i, v);
     } else {
-      int x;
-      cin >> x;
-      cout << st.first_above(x) << '\n';
+      int x, ind;
+      cin >> x >> ind;
+      cout << st.first_above(x, ind) << '\n';
     }
   }
   return 0;
