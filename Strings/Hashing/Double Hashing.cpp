@@ -58,6 +58,7 @@ class Hashing {
     H x = h[r][1] - (!l ? (H){0, 0} : h[l - 1][1]);
     return x * IP[n - 1 - r];
   }
+  H concat(H h1, H h2, int sizeof_Hash1) { return h1 + h2 * P[sizeof_Hash1]; }
 };
 
 void PreCalculation(void) {}

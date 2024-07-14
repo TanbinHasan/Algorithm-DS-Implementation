@@ -12,11 +12,8 @@ int LengthofLCS(string &a, string &b, int x, int y) {
   if (x == (int)a.size() || y == (int)b.size()) return 0;
   if (len[x][y] != -1) return len[x][y];
   int ans = 0;
-  if (a[x] == b[y]) {
-    ans = 1 + LengthofLCS(a, b, x + 1, y + 1);
-  } else {
-    ans = max(LengthofLCS(a, b, x + 1, y), LengthofLCS(a, b, x, y + 1));
-  }
+  if (a[x] == b[y]) ans = 1 + LengthofLCS(a, b, x + 1, y + 1);
+  else ans = max(LengthofLCS(a, b, x + 1, y), LengthofLCS(a, b, x, y + 1));
   return len[x][y] = ans;
 }
 

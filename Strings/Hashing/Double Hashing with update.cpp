@@ -63,6 +63,7 @@ class Hashing {
   }
   H get_h(int l, int r) { return query(l, r)[0] * IP[l]; }
   H get_rh(int l, int r) { return query(l, r)[1] * IP[n - 1 - r]; }
+  H concat(H h1, H h2, int sizeof_Hash1) { return h1 + h2 * P[sizeof_Hash1]; }
 };
 
 void PreCalculation(void) {}
