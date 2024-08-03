@@ -12,13 +12,9 @@ vector<vector<i64>> dp;
 i64 DP(vector<pair<int, int>>& a, int n, int W) {
   for (int i = n - 1; i >= 0; --i) {
     for (int j = 1; j <= W; ++j) {
-      if (j - a[i].first < 0) {
-        dp[i][j] = dp[i + 1][j];
-        continue;
-      }
-      i64 o1 = dp[i + 1][j - a[i].first] + a[i].second;
-      i64 o2 = dp[i + 1][j];
-      dp[i][j] = max(o1, o2);
+      auto [w, p] = a[i];
+      dp[i][j] = dp[i + 1][j]; // option1
+      if (j - w >= 0) dp[i][j] = max(dp[i][j], dp[i + 1][j - w] + p); // option2
     }
   }
   return dp[0][W];
@@ -26,9 +22,10 @@ i64 DP(vector<pair<int, int>>& a, int n, int W) {
 
 void DP_Path(vector<pair<int, int>>& a, int i, int n, int j) {
   if (i == n || !j) return;
-  if (j >= a[i].first && dp[i + 1][j - a[i].first] >= dp[i + 1][j]) {
+  auto [w, p] = a[i];
+  if (j >= w && dp[i + 1][j - w] + p >= dp[i + 1][j]) {
     cout << i << " ";
-    DP_Path(a, i + 1, n, j - a[i].first);
+    DP_Path(a, i + 1, n, j - w);
   } else DP_Path(a, i + 1, n, j);
 }
 
@@ -46,3 +43,7 @@ int main(void) {
   // DP_Path(a, 0, n, W);
   return 0;
 }
+/* 
+https://atcoder.jp/contests/dp/submissions/55615648
+https://atcoder.jp/contests/dp/submissions/55617454
+*/

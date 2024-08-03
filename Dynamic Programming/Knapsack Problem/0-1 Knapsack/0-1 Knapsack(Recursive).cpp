@@ -21,9 +21,10 @@ i64 DP(vector<pair<int, int>>& a, int i, int n, int j) {
 
 void DP_Path(vector<pair<int, int>>& a, int i, int n, int j) {
   if (i == n || !j) return;
-  if (j >= a[i].first && dp[i + 1][j - a[i].first] >= dp[i + 1][j]) {
+  auto [w, p] = a[i];
+  if (j >= w && dp[i + 1][j - w] + p >= dp[i + 1][j]) {
     cout << i << " ";
-    DP_Path(a, i + 1, n, j - a[i].first);
+    DP_Path(a, i + 1, n, j - w);
   } else DP_Path(a, i + 1, n, j);
 }
 
