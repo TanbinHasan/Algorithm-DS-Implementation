@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
-
 using namespace std;
+
+typedef long long i64;
 
 /*
 Given a sequence A and a permutation P.
@@ -15,7 +16,7 @@ T apply(T a, T p) {
 }
 
 template<typename T>
-T NthPermutation(T a, T p, int k) {
+T NthPermutation(T a, T p, i64 k) {
   int n = (int)a.size();
   while (k) {
     if (k & 1) {

@@ -1,7 +1,7 @@
 /**
  *    author:  Tanbin_Hasan
  *    created: 16.06.2021 02:06:04
-**/
+ **/
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -16,7 +16,8 @@ int MaxPathSum(int n, int m, int i, int j) {
 }
 
 int main(void) {
-  ios::sync_with_stdio(false); cin.tie(0);
+  ios::sync_with_stdio(false);
+  cin.tie(0);
   int n, m;
   cin >> n >> m;
   for (int i = 0; i < n; ++i) {
