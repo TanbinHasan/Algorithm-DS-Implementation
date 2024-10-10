@@ -5,40 +5,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long int i64;
+typedef long long i64;
 
-const int lim = 10005; // sqrt(n)
-bitset<lim> vis(3);
+const int MX = (int)1e6 + 1; // sqrt(n)
+bitset<MX> vis(3);
+
 vector<int> GenPrime(int n) {
-  vector<int> prime;
-  if (n > 1) prime.push_back(2);
+  vector<int> v;
+  if (n > 1) v.push_back(2);
+  for (int i = 4; i <= n; i += 2) vis[i] = 1;
   for (int i = 3; i <= n; i += 2) {
     if (vis[i]) continue;
-    prime.push_back(i);
+    v.push_back(i);
     if (1LL * i * i > n) continue;
     for (int j = i * i; j <= n; j += 2 * i) vis[j] = 1;
   }
-  return prime;
+  return v;
 }
 
-auto prime = GenPrime(lim - 1); // sqrt(n)
-int TotalCoprime(int n) {
-  int coprime = n;
-  for (auto &i : prime) {
-    if (i * i > n) break;
+auto prime = GenPrime(MX - 1); // sqrt(n)
+
+i64 TotalCoprime(i64 n) {
+  i64 res = n;
+  for (auto& i : prime) {
+    if (1LL * i * i > n) break;
     if (n % i) continue;
     while (!(n % i)) n /= i;
-    coprime -= (coprime / i);
+    res -= (res / i);
   }
-  if (n > 1) coprime -= (coprime / n);
-  return coprime;
+  if (n > 1) res -= (res / n);
+  return res;
 }
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int n;
+  i64 n;
   cin >> n;
   cout << TotalCoprime(n) << '\n';
   return 0;
 }
+/*
+https://www.hackerrank.com/contests/srbd-code-contest-2024-round-1/challenges/mathematician-montu/problem  
+*/

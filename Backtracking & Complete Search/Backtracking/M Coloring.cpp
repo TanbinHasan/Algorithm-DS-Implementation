@@ -5,19 +5,19 @@
 using namespace std;
 
 vector<int> col;
-bool BackTrack(vector<vector<int>>& adj, int c, int n, int m) {
+bool BackTrack(vector<vector<int>>& g, int c, int n, int m) {
   if (c == n) return true;
   for (int i = 0; i < m; ++i) {
     bool ok = true;
-    for (auto& child : adj[c]) {
-      if (col[child] == i) {
+    for (auto& v : g[c]) {
+      if (col[v] == i) {
         ok = false;
         break;
       }
     }
     if (!ok) continue;
     col[c] = i;
-    if (BackTrack(adj, c + 1, n, m)) return true;
+    if (BackTrack(g, c + 1, n, m)) return true;
     col[c] = -1;
   }
   return false;
@@ -37,14 +37,14 @@ void PreCalc(void) {}
 void Solve(__attribute__((unused)) int tc) {
   int n, m;
   cin >> n >> m;
-  vector<vector<int>> adj(n);
+  vector<vector<int>> g(n);
   while (m--) {
     int x, y;
     cin >> x >> y;
-    adj[x].push_back(y);
-    adj[y].push_back(x);
+    g[x].push_back(y);
+    g[y].push_back(x);
   }
-  int need = Mcoloring(adj, n, 4);
+  int need = Mcoloring(g, n, 4);
   // cout << need << " ";
   if (need <= 4) {
     cout << need << '\n';

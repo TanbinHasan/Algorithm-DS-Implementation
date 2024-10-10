@@ -19,10 +19,7 @@ class SegmentTree {
     build(a, u << 1 | 1, m + 1, r);
     t[u] = combine(t[u << 1], t[u << 1 | 1]);
   }
-  SegmentTree(vector<int> a) : n((int)a.size()) {
-    t.resize(4 * n);
-    build(a, 1, 0, n - 1);
-  }
+  SegmentTree(vector<int> a) : n((int)a.size()), t(4 * n) { build(a, 1, 0, n - 1); }
 
   void update(int u, int l, int r, int p, int val) {
     if (l == r) return void(t[u] = val);  // change here
@@ -32,10 +29,11 @@ class SegmentTree {
     t[u] = combine(t[u << 1], t[u << 1 | 1]);
   }
   void update(int p, int val) { update(1, 0, n - 1, p, val); }
+
   T query(int u, int l, int r, int L, int R) {
     if (L <= l && r <= R) return t[u];
     int m = l + (r - l) / 2;
-    if (R <= m) return query(u << 1, l, m, L, R);
+    if (m >= R) return query(u << 1, l, m, L, R);
     if (m < L) return query(u << 1 | 1, m + 1, r, L, R);
     return combine(query(u << 1, l, m, L, R), query(u << 1 | 1, m + 1, r, L, R));
   }

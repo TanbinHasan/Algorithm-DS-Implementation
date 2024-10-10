@@ -9,13 +9,13 @@ using namespace std;
 const int MX = (int) 1e5 + 1;
 vector<int> sz(MX);
 
-int DFS(vector<vector<int>>& adj, int node, int par) {
-  if ((int)adj[node].size() == 1 && par != -1) return 0;
-  for (auto& child : adj[node]) {
-    if (child == par) continue;
-    sz[node] += (DFS(adj, child, node) + 1);
+int DFS(vector<vector<int>>& g, int u, int p) {
+  if ((int)g[u].size() == 1 && p != -1) return 0;
+  for (auto& v : g[u]) {
+    if (v == p) continue;
+    sz[u] += (DFS(g, v, u) + 1);
   }
-  return sz[node];
+  return sz[u];
 }
 
 int main(void) {

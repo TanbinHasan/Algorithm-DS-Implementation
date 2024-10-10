@@ -8,11 +8,7 @@ class Graph {
   vector<string> g;
   vector<vector<bool>> vis;
  public:
-  Graph(int _n, int _m) {
-    n = _n;
-    g.resize(n);
-    vis.resize(n);
-  }
+  Graph(int n, int m) : n(n), m(m), g(n), vis(n) {}
   void add(int u, string s) { g[u] = s; }
 
   void dfs(int ux, int uy) {

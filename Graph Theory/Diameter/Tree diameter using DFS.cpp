@@ -1,38 +1,47 @@
-/**
- *    author:  Tanbin_Hasan
- *    created: 17.09.2021 15:30:03
-**/
 #include <bits/stdc++.h>
- 
 using namespace std;
- 
-int diameter, MxDis, FarNode;
- 
-void DFS(vector<vector<int>> &adj, int node, int par, int dis) {
-  if (dis > MxDis) {
-    MxDis = dis;
-    FarNode = node;
-    diameter = max(diameter, MxDis);
+
+class Graph {
+  vector<vector<int>> g;
+  int diameter, MaxDis, FarNode;
+ public:
+  Graph(int n) : g(n), diameter(0), MaxDis(0), FarNode(0) {}
+  void add(int u, int v) { g[u].push_back(v); }
+
+  void dfs(int u, int d, int p = -1) {
+    if (d > MaxDis) {
+      MaxDis = d;
+      FarNode = u;
+      diameter = max(diameter, MaxDis);
+    }
+    for (auto& v : g[u]) {
+      if (v == p) continue;
+      dfs(v, d + 1, u);
+    }
   }
-  for (auto &child : adj[node]) {
-    if (child == par) continue;
-    DFS(adj, child, node, dis + 1);
+
+  int FindDiameter(void) {
+    dfs(0, 0);
+    dfs(FarNode, 0);
+    return diameter;
   }
-}
+};
 
 int main(void) {
-  ios::sync_with_stdio(false); cin.tie(0);
-  int nodes, edges;
-  cin >> nodes >> edges;
-  vector<vector<int>> adj(nodes + 1);
-  for (int i = 1; i < nodes; ++i) {
-    int x, y;
-    cin >> x >> y;
-    adj[x].push_back(y);
-    adj[y].push_back(x);
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  int n;
+  cin >> n;
+  Graph g(n);
+  for (int i = 1; i < n; ++i) {
+    int u, v;
+    cin >> u >> v;
+    --u, --v;
+    g.add(u, v), g.add(v, u);
   }
-  DFS(adj, 1, -1, 0);
-  DFS(adj, FarNode, -1 , 0);
-  cout << diameter;
+  cout << g.FindDiameter() << '\n';
   return 0;
 }
+/*
+https://cses.fi/problemset/task/1131  
+*/

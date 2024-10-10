@@ -10,11 +10,7 @@ class Graph {
   vector<vector<int>> g;
   vector<bool> vis;
  public:
-  Graph(int _n) {
-    n = _n;
-    g.resize(n);
-    vis.resize(n);
-  }
+  Graph(int n) : n(n), g(n), vis(n) {}
   void add(int u, int v) { g[u].push_back(v); }
 
   void dfs(int u) {

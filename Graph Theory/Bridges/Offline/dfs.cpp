@@ -12,14 +12,7 @@ class Graph {
  public:
   vector<bool> vis;
   vector<pair<int, int>> bridges;
-  Graph(int n) {
-    this->n = n;
-    g.resize(n);
-    vis.resize(n);
-    d.resize(n);
-    low.resize(n);
-    timer = 0;
-  }
+  Graph(int n) : n(n), g(n), vis(n), d(n), low(n), timer(0) {}
 
   void add(int u, int v) { g[u].push_back(v); }
 
