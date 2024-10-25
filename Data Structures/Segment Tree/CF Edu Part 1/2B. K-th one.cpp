@@ -32,6 +32,7 @@ class SegmentTree {
     t[u] = combine(t[u << 1], t[u << 1 | 1]);
   }
   void update(int p, int val) { update(1, 0, n - 1, p, val); }
+
   T find(int k, int u, int l, int r) {
     if (l == r) return l;
     int m = l + (r - l) / 2LL;

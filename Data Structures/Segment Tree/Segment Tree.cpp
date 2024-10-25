@@ -12,30 +12,30 @@ class SegmentTree {
   T combine(T x, T y) {  // change here
     return x + y;
   }
-  void build(vector<int>& a, int u, int l, int r) {
-    if (l == r) return void(t[u] = a[l]);  // change here
+  void build(vector<int>& a, int at, int l, int r) {
+    if (l == r) return void(t[at] = a[l]);  // change here
     int m = l + (r - l) / 2;
-    build(a, u << 1, l, m);
-    build(a, u << 1 | 1, m + 1, r);
-    t[u] = combine(t[u << 1], t[u << 1 | 1]);
+    build(a, at << 1, l, m);
+    build(a, at << 1 | 1, m + 1, r);
+    t[at] = combine(t[at << 1], t[at << 1 | 1]);
   }
   SegmentTree(vector<int> a) : n((int)a.size()), t(4 * n) { build(a, 1, 0, n - 1); }
 
-  void update(int u, int l, int r, int p, int val) {
-    if (l == r) return void(t[u] = val);  // change here
+  void update(int at, int l, int r, int p, int val) {
+    if (l == r) return void(t[at] = val);  // change here
     int m = l + (r - l) / 2;
-    if (p <= m) update(u << 1, l, m, p, val);
-    else update(u << 1 | 1, m + 1, r, p, val);
-    t[u] = combine(t[u << 1], t[u << 1 | 1]);
+    if (p <= m) update(at << 1, l, m, p, val);
+    else update(at << 1 | 1, m + 1, r, p, val);
+    t[at] = combine(t[at << 1], t[at << 1 | 1]);
   }
   void update(int p, int val) { update(1, 0, n - 1, p, val); }
 
-  T query(int u, int l, int r, int L, int R) {
-    if (L <= l && r <= R) return t[u];
+  T query(int at, int l, int r, int L, int R) {
+    if (L <= l && r <= R) return t[at];
     int m = l + (r - l) / 2;
-    if (m >= R) return query(u << 1, l, m, L, R);
-    if (m < L) return query(u << 1 | 1, m + 1, r, L, R);
-    return combine(query(u << 1, l, m, L, R), query(u << 1 | 1, m + 1, r, L, R));
+    if (m >= R) return query(at << 1, l, m, L, R);
+    if (m < L) return query(at << 1 | 1, m + 1, r, L, R);
+    return combine(query(at << 1, l, m, L, R), query(at << 1 | 1, m + 1, r, L, R));
   }
   T query(int l, int r) { return query(1, 0, n - 1, l, r); }
 };

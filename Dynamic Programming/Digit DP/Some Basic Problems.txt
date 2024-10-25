@@ -1,2 +1,0 @@
-1. Count the number of integers within the range A to B whose digitSum equals to X.
-   A, B <= 10^9, X <= 10^5

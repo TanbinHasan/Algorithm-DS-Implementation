@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MX = (int)1e6 + 1; // sum of array + 1
+const int MX = (int)1e5 + 1; // sum of array + 1
 bitset<MX> dp;
 
 void CalcSubsets(vector<int> a) {
