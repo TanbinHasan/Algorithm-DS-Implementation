@@ -77,7 +77,6 @@ int main(void) {
     int n, r;
     cin >> n >> r;
     cout << (int)comb.nCr(n, r) << '\n';
-    // git update
   }
   return 0;
 }
