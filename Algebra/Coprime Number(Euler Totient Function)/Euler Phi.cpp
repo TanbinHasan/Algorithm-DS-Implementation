@@ -13,7 +13,6 @@ bitset<MX> vis(3);
 vector<int> GenPrime(int n) {
   vector<int> v;
   if (n > 1) v.push_back(2);
-  for (int i = 4; i <= n; i += 2) vis[i] = 1;
   for (int i = 3; i <= n; i += 2) {
     if (vis[i]) continue;
     v.push_back(i);
@@ -23,9 +22,9 @@ vector<int> GenPrime(int n) {
   return v;
 }
 
-auto prime = GenPrime(MX - 1); // sqrt(n)
+auto prime = GenPrime(MX - 1);
 
-i64 TotalCoprime(i64 n) {
+i64 phi(i64 n) {
   i64 res = n;
   for (auto& i : prime) {
     if (1LL * i * i > n) break;
@@ -42,7 +41,7 @@ int main(void) {
   cin.tie(0);
   i64 n;
   cin >> n;
-  cout << TotalCoprime(n) << '\n';
+  cout << phi(n) << '\n';
   return 0;
 }
 /*

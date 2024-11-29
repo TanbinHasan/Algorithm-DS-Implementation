@@ -1,14 +1,15 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int SNOD(int n) {
-  int res = 0;
-  for (int i = 1; i * i <= n; ++i) {
+typedef long long i64;
+
+i64 SNOD(int n) {
+  i64 res = 0;
+  for (int i = 1; 1LL * i * i <= n; ++i) {
     res += ((n / i) - i);
   }
   res <<= 1;
-  res += (int)sqrtl(n);
+  res += (i64)sqrtl(n);
   return res;
 }
 

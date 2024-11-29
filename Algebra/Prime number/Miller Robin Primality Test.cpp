@@ -8,6 +8,7 @@ using namespace std;
 
 using u64 = uint64_t;
 using u128 = __uint128_t;
+
 u64 BigMod(u64 b, u64 p, u64 md) {
   b %= md;
   u64 res = 1;
@@ -29,7 +30,7 @@ bool check_composite(u64 n, u64 a, u64 d, int s) {
   return true;
 }
 
-bool MillerRobin(u64 n) {
+bool check_prime(u64 n) {
   if (n < 2) return false;
   u64 d = n - 1, r = 0;
   while (!(d & 1)) {
@@ -51,7 +52,7 @@ int main(void) {
   while (tc--) {
     long long n;
     cin >> n;
-    if (MillerRobin(n)) {
+    if (check_prime(n)) {
       cout << "YES\n";
     } else {
       cout << "NO\n";

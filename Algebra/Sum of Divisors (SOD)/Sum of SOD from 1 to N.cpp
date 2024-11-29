@@ -3,30 +3,28 @@
  *    created: 29.10.2023 19:25:29
 **/
 #include <bits/stdc++.h>
+using namespace std;
 
-#define int long long
-#define ll __int128_t
+typedef long long i64;
 
-int SSOD(int n) {
+i64 SSOD(i64 n) {
   int res = 0;
-  for (int i = 1; i * i <= n; ++i) {
-    int p = n / i;
-    int x = i * (p - i + 1);
-    int y = (p * (p + 1)) / 2LL - (i * (i + 1)) / 2LL;
+  for (i64 i = 1; i * i <= n; ++i) {
+    i64 p = n / i;
+    i64 x = i * (p - i + 1);
+    i64 y = (p * (p + 1)) / 2LL - (i * (i + 1)) / 2LL;
     res += (x + y);
   }
   return res;
 }
 
-using namespace std;
-
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   int tc;
   cin >> tc;
   while (tc--) {
-    int n;
+    i64 n;
     cin >> n;
     cout << SSOD(n) << '\n';
   }

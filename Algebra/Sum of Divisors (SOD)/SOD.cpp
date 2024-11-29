@@ -1,19 +1,18 @@
 /**
  *    Author  : Tanbin_Hasan
- *    Created : 09.10.2020
+ *    Created : 06.09.2020
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
 typedef long long i64;
 
-const int MX = (int) 1e7 + 5; // mx(a[i]) + 1
+const int MX = (int)1e6 + 1; // sqrt(n)
 bitset<MX> vis(3);
 
 vector<int> GenPrime(int n) {
   vector<int> v;
   if (n > 1) v.push_back(2);
-  for (int i = 4; i <= n; i += 2) vis[i] = 1;
   for (int i = 3; i <= n; i += 2) {
     if (vis[i]) continue;
     v.push_back(i);
@@ -23,24 +22,29 @@ vector<int> GenPrime(int n) {
   return v;
 }
 
-auto prime = GenPrime(MX - 1); // N + 1
+auto prime = GenPrime(MX - 1);
 
-vector<int> sieve_phi(int n) {
-  vector<int> v(n + 1);
-  for (int i = 0; i <= n; ++i) v[i] = i;
-  for (auto &p : prime)
-    for (int i = p; i <= n; i += p) v[i] -= (v[i] / p);
-  return v;
+i64 SOD(i64 n) {
+  i64 res = 1;
+  for (auto& p : prime) {
+    if (1LL * p * p > n) break;
+    i64 sum = 1, prod = 1;
+    while (n % p == 0) {
+      n /= p;
+      prod *= p;
+      sum += prod;
+    }
+    res *= sum;
+  }
+  if (n != 1) res *= (1 + n);
+  return res;
 }
 
 int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int n;
+  i64 n;
   cin >> n;
-  auto coprime = sieve_phi(n);
-  for (int i = 0; i <= n; ++i) {
-    cout << coprime[i] << '\n';
-  }
+  cout << SOD(n) << '\n';
   return 0;
 }

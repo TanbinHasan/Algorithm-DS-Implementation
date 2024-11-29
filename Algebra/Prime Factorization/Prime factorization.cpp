@@ -1,64 +1,49 @@
 /**
  *    Author  : Ador
  *    Created : 04.09.2020
-**/
+ **/
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
 
-const int lim = 10000001;
-bitset<lim> check(3); // sqrt(n) + 1, Safe: 1e7
+typedef long long i64;
+
+const int MX = (int)1e6 + 1;  // sqrt(n)
+bitset<MX> vis(3);
+
 vector<int> GenPrime(int n) {
-  vector<int> prime;
-  if (n > 1) prime.push_back(2);
+  vector<int> v;
+  if (n > 1) v.push_back(2);
   for (int i = 3; i <= n; i += 2) {
-    if (check[i]) continue;
-    prime.push_back(i);
-    for (int j = i * i; j <= n; j += 2 * i) check[j] = 1;
+    if (vis[i]) continue;
+    v.push_back(i);
+    if (1LL * i * i > n) continue;
+    for (int j = i * i; j <= n; j += 2 * i) vis[j] = 1;
   }
-  return prime;
+  return v;
 }
 
-auto prime = GenPrime(lim - 1); // sqrt(n) + 1, Safe: 1e7
+auto prime = GenPrime(MX - 1);
 
-vector<pair<int,int>> PrimeFact(int n) {
-  vector<pair<int,int>> factors;
-  for (auto &i : prime) {
-    if (1LL * i * i > n) break;
-    if (n % i) continue;
+vector<pair<i64, int>> prime_fact(i64 n) {
+  vector<pair<i64, int>> factors;
+  for (auto& p : prime) {
+    if (1LL * p * p > n) break;
     int cnt = 0;
-    while (!(n % i)) ++cnt, n /= i;
-    factors.push_back({i, cnt});
+    while (n % p == 0) ++cnt, n /= p;
+    if (cnt) factors.push_back({p, cnt});
   }
   if (n != 1) factors.push_back({n, 1});
   return factors;
-} 
+}
 
-
-/* vector<int> PrimeFact(int n) {
-  vector<int> factors;
-  for (auto &i : prime) {
-    if (1LL * i * i > n) break;
-    if (n % i) continue;
-    while (!(n % i)) {
-      factors.push_back(i);
-      n /= i;
-    }
-  }
-  if (n != 1) factors.push_back(n);
-  return factors;
-} */
-
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int n;
+  i64 n;
   cin >> n;
-  auto factors = PrimeFact(n);
-  for (auto &[x, y] : factors) {
-    cout << x << " " << y << "\n";
+  auto factors = prime_fact(n);
+  for (auto& [p, x] : factors) {
+    cout << p << " " << x << "\n";
   }
   return 0;
 }

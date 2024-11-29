@@ -1,13 +1,13 @@
 /**
- *    Author  : Tanbin_Hasan
- *    Created : 04.09.2020
-**/
+ *    Author  : BlackIce666
+ *    Created : 06.09.2020
+ **/
 #include <bits/stdc++.h>
 using namespace std;
 
 typedef long long i64;
 
-const int MX = 1e7 + 1; // n + 1
+const int MX = (int)1e6 + 5; // sqrt(n)
 bitset<MX> vis(3);
 
 vector<int> GenPrime(int n) {
@@ -24,28 +24,23 @@ vector<int> GenPrime(int n) {
 
 auto prime = GenPrime(MX - 1);
 
-vector<pair<int, int>> PrimeFact_fact(int n) {
-  vector<pair<int, int>> factors;
-  for (auto& p : prime) {
-    if (p > n) break;
-    int m = n, cnt = 0;
-    while (m > 0) {
-      cnt += m / p;
-      m /= p;
-    }
-    if (cnt) factors.push_back({p, cnt});
+int NOD(i64 n) {
+  int res = 1;
+  for (auto &p : prime) {
+    if (1LL * p * p > n) break;
+    int cnt = 1;
+    while (!(n % p)) ++cnt, n /= p;
+    res *= cnt;
   }
-  return factors;
+  if (n != 1) res *= 2;
+  return res;
 }
 
 int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int n;
+  i64 n;
   cin >> n;
-  auto factors = PrimeFact_fact(n);
-  for (auto& [p, x] : factors) {
-    cout << p << " " << x << '\n';
-  }
+  cout << NOD(n) << '\n';
   return 0;
 }

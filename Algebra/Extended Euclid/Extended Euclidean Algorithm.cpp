@@ -3,10 +3,9 @@
  *    created: 14.10.2021 00:00:29
  **/
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
+
+typedef long long i64;
 
 int egcd(int a, int b, int& x, int& y) {
   if (!b) {
@@ -32,7 +31,7 @@ int egcd(int a, int b, int& x, int& y) {
   return a1;
 }
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   int a, b, x, y;
