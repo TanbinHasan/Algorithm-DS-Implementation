@@ -2,16 +2,16 @@
  *    Author  : Tanbin_Hasan
  *    Created : 13.12.2020
  **/
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-void SubSets(vector<int> &ar, int n) {
+typedef long long i64;
+
+void SubSets(vector<int>& a, int n) {
   for (int mask = 0; mask < (1LL << n); ++mask) {
     for (int i = 0; i < n; ++i) {
       if (mask & (1LL << i)) {
-        cout << ar[i] << ' ';
+        cout << a[i] << ' ';
       }
     }
     cout << '\n';

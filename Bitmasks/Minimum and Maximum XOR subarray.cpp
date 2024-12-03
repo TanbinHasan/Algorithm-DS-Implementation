@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
 
+typedef long long i64;
+
+const i64 INF = (int)1e15;
 const int N = 50000; // size of the array
 const int M = 32; // max size/bit of each element of array
 const int K = 2; // total number of characters
-int32_t nexts[N * M][K];
-int32_t node_cnt;
+int nexts[N * M][K];
+int node_cnt;
 
 class Trie {
  public:
@@ -26,7 +26,7 @@ class Trie {
     }
   }
 
-  int MaxSubXOR(int n) {
+  int max_sub_xor(int n) {
     int ans = 0, cur = 0;
     for (int i = M - 1; i >= 0; --i) {
       int x = ((n >> i) & 1LL);
@@ -36,7 +36,7 @@ class Trie {
     return ans;
   }
 
-  int MinSubXOR(int n) {
+  int min_sub_xor(int n) {
     int ans = 0, cur = 0;
     for (int i = M - 1; i >= 0; --i) {
       int x = ((n >> i) & 1LL);
@@ -47,16 +47,16 @@ class Trie {
   }
 };
 
-pair<int, int> MaxMinSubXOR(vector<int> a) {
+pair<int, int> max_min(vector<int> a) {
   Trie t;
   t.insert(0);
-  int mx = numeric_limits<int>::min();
-  int mn = numeric_limits<int>::max();
+  int mx = -INF;
+  int mn = INF;
   int x = 0;
   for (auto& i : a) {
     x ^= i;
-    mx = max(mx, t.MaxSubXOR(x));
-    mn = min(mn, t.MinSubXOR(x));
+    mx = max(mx, t.max_sub_xor(x));
+    mn = min(mn, t.min_sub_xor(x));
     t.insert(x);
   }
   return make_pair(mx, mn);
@@ -72,11 +72,11 @@ void Solve(__attribute__((unused)) int tc) {
   for (auto& i : a) {
     cin >> i;
   }
-  auto [mx, mn] = MaxMinSubXOR(a);
+  auto [mx, mn] = max_min(a);
   cout << mx << " " << mn << '\n';
 }
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   PreCalc();

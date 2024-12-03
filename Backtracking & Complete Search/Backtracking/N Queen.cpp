@@ -3,16 +3,16 @@
  *    created: 13.05.2024 21:38:21
 **/
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
+
+typedef long long i64;
 
 const int MX = 10;
 vector<bool> col(MX), ld(2 * MX + 1), rd(2 * MX + 1);
 vector<vector<int>> store; // all solutions
 vector<int> v; // current solution
-void BackTrack(int n, int c) {
+
+void rec(int n, int c) {
   if (c == n) { // all columns have been taken
     store.push_back(v);
     return;
@@ -21,18 +21,18 @@ void BackTrack(int n, int c) {
     if (col[i] || ld[i + c] || rd[c - i + n - 1]) continue;
     col[i] = ld[i + c] = rd[c - i + n - 1] = true;
     v.push_back(i);
-    BackTrack(n, c + 1);
+    rec(n, c + 1);
     col[i] = ld[i + c] = rd[c - i + n - 1] = false;
     v.pop_back();
   }
 }
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   int n;
   cin >> n;
-  BackTrack(n, 0);
+  rec(n, 0);
   for (auto& v : store) {
     for (auto& i : v) {
       cout << i << " ";

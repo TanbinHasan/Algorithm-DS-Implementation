@@ -3,32 +3,28 @@
  *    created: 17.11.2021 03:21:56
 **/
 #include <bits/stdc++.h>
-
-#define int long long
- 
 using namespace std;
 
-double BiSection(double a, double b, double c) {
-  double low = 0, high = c;
-  double eps = 1e-7;
-  while (high - low >= eps) {
-    double mid = (low + high) / 2.0;
-    double x = a * mid + b * sin(mid);
-    if (x <= c) {
-      low = mid;
-    } else {
-      high = mid;
-    }
+typedef long long i64;
+
+double bisection(double a, double b, double c) {
+  double l = 0, r = c;
+  int iter = 60; // safezone
+  while (iter--) {
+    double m = (l + r) / 2.0;
+    double x = a * m + b * sin(m);
+    if (x <= c) l = m;
+    else r = m;
   }
-  return (low + high) / 2;
+  return (l + r) / 2.0l;
 }
 
-signed main(void) {
+int main(void) {
   ios::sync_with_stdio(false); 
   cin.tie(0);
   double a, b, c;
   cin >> a >> b >> c;
   cout << fixed << setprecision(6);
-  cout << BiSection(a, b, c) << '\n';
+  cout << bisection(a, b, c) << '\n';
   return 0;
 } 

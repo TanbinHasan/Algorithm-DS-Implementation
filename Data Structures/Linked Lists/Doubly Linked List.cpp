@@ -3,11 +3,9 @@
  *    created: 30.03.2024 17:05:46
  **/
 #include <bits/stdc++.h>
-
-#define int long long
-#define ll __int128_t
-
 using namespace std;
+
+typedef long long i64;
 
 template <typename T>
 class linked_list {
@@ -110,7 +108,7 @@ int32_t main(void) {
   l.print();
   l.reverseprint();
   linked_list<string> ls;
-  ls.push("Rumu");
+  ls.push("Kirk");
   ls.push("Ador");
   ls.push("Habib");
   ls.erase("Habiba");

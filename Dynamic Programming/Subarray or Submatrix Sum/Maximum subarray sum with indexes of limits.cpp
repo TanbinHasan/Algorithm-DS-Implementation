@@ -2,16 +2,16 @@
  *    author: Tanbin_Hasan
  *    created: 12.05.2021 01:44:20
  **/
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <iostream>
 #include <tuple>
+#include <vector>
 
 #define int long long
 
 using namespace std;
 
-tuple<int,int,int> MaxSubArSum(vector<int> &ar, int n) {
+tuple<int, int, int> MaxSubArSum(vector<int> &ar, int n) {
   tuple<int, int, int> ans(ar.front(), 0, 0);
   auto &[x, y, z] = ans;
   int sum = 0, left = 0;

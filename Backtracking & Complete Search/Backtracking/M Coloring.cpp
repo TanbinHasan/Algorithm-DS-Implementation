@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
+
+typedef long long i64;
 
 vector<int> col;
 bool BackTrack(vector<vector<int>>& g, int c, int n, int m) {
@@ -53,10 +52,9 @@ void Solve(__attribute__((unused)) int tc) {
   }
 }
 
-int32_t main(void) {
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  cout.precision(12);
   PreCalc();
   int tt = 1, tc = 0;
 #ifdef MultipleCase

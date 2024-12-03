@@ -3,14 +3,12 @@
  *    Created : 17.09.2020
 **/
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
 
-int TotSetBits(int n) {
-  int n, cnt = 0;
-  cin >> n;
+typedef long long i64;
+
+int popcount(i64 n) {
+  int cnt = 0;
   while (n > 0) {
     ++cnt;
     n &= (n - 1);
@@ -23,7 +21,7 @@ signed main(void) {
   cin.tie(0);
   int n;
   cin >> n;
-  cout << TotSetBits(n) << '\n';
+  cout << popcount(n) << '\n';
   cout << __builtin_popcountll(n) << '\n'; // By Builtin Function
   return 0;
 }

@@ -36,7 +36,7 @@ i64 SOD(i64 n) {
     }
     res *= sum;
   }
-  if (n != 1) res *= (1 + n);
+  if (n != 1) res *= (n + 1);
   return res;
 }
 

@@ -48,35 +48,34 @@ class Mint {
 const int MX = (int)1e6 + 1;
 const int MOD = 1000000007;
 using mi = Mint<MOD>;
-vector<mi> F(MX), IF(MX), I(MX); // factorial, inverse factorial, inverse value
-bool ISCALC;
+vector<mi> fac(MX), ifac(MX), iv(MX); // factorial, inverse factorial, inverse value
 
 class Combinatorics {
-  bool CalcFacts(void) {
-    F[0] = F[1] = IF[0] = IF[1] = I[1] = 1;
-    for (int i = 2; i < MX; ++i) {
-      I[i] = I[MOD % i] * -(MOD / i);
-      F[i] = F[i - 1] * i;
-      IF[i] = IF[i - 1] * I[i];
-    }
-    return true;
-  }
  public:
-  Combinatorics() { if (!ISCALC) ISCALC = CalcFacts(); }
-  mi nPr(int n, int r) { return F[n] * IF[n - r]; }
-  mi nCr(int n, int r) { return nPr(n, r) * IF[r]; }
+  mi npr(int n, int r) { return fac[n] * ifac[n - r]; }
+  mi ncr(int n, int r) { return npr(n, r) * ifac[r]; }
 };
+
+void precalc(void) {
+  fac[0] = fac[1] = ifac[0] = ifac[1] = iv[1] = 1;
+  for (int i = 2; i < MX; ++i) {
+    iv[i] = iv[MOD % i] * -(MOD / i);
+    fac[i] = fac[i - 1] * i;
+    ifac[i] = ifac[i - 1] * iv[i];
+  }
+}
 
 int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
+  precalc();
   int tt;
   cin >> tt;
   Combinatorics comb;
   while (tt--) {
     int n, r;
     cin >> n >> r;
-    cout << (int)comb.nCr(n, r) << '\n';
+    cout << (int)comb.ncr(n, r) << '\n';
   }
   return 0;
 }
