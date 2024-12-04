@@ -1,60 +1,55 @@
 /**
  *    author:  T.H666
  *    created: 07.02.2022 20:02:13
-**/
+ **/
 #include <bits/stdc++.h>
-
-#define int long long
-
 using namespace std;
 
-int MaxSubMatSum(vector<vector<int>> &mat, int r, int c) {
-  vector<vector<int>> pref(r, vector<int>(c));
-  for (int i = 0; i < r; ++i) {
-    for (int j = 0; j < c; ++j) {
-      if (!j) pref[i][j] = mat[i][j];
-      else pref[i][j] = pref[i][j - 1] + mat[i][j];
-    }
-  }
-  int mxsum = LLONG_MIN;
-  for (int i = 0; i < c; ++i) {
-    for (int j = i; j < c; ++j) {
-      vector<int> ar;
-      for (int k = 0; k < r; ++k) {
-        int x = ((i == 0) ? (pref[k][j]) : (pref[k][j] - pref[k][i - 1]));
-        ar.push_back(x);
-      }
-      int mx = LLONG_MIN, sum = 0;
-      for (auto &k : ar) {
-        sum += k;
-        mx = max(mx, sum);
-        sum = max(0LL, sum);
-      }
-      mxsum = max(mxsum, mx);
-    }
-  }
-  return mxsum;
-}
+typedef long long i64;
 
-/* 
+const i64 INF = (i64)1e15;
+
+/*
 Process:
-  1. determine prefix sum of all rows 
-  2. select 1st & last column
-  3. traversing all rows 
+  1. determine prefix sum of all rows
+  2. select 1st & last column (left and right of the range actually)
+  3. traversing all rows
   4. use kadane algorithm to determine maximum
 */
 
-signed main(void) {
+i64 max_sub_mat_sum(vector<vector<int>>& v, int n, int m) {
+  vector<vector<i64>> pref(n, vector<i64>(m));
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < m; ++j)
+      pref[i][j] = v[i][j] + (j ? pref[i][j - 1] : 0);
+  i64 ans = -INF;
+  for (int l = 0; l < m; ++l) {
+    for (int r = l; r < m; ++r) {
+      vector<int> v;
+      for (int i = 0; i < r; ++i) v.push_back(pref[i][r] - (l ? pref[i][l - 1] : 0));
+      i64 mx = -INF, sum = 0;
+      for (auto& i : v) {
+        sum += i;
+        mx = max(mx, sum);
+        sum = max(0LL, sum);
+      }
+      ans = max(ans, mx);
+    }
+  }
+  return ans;
+}
+
+int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   int n, m;
   cin >> n >> m;
-  vector<vector<int>> mat(n, vector<int>(m));
-  for (auto &i : mat) {
-    for (auto &j : i) {
+  vector<vector<int>> v(n, vector<int>(m));
+  for (auto& i : v) {
+    for (auto& j : i) {
       cin >> j;
     }
   }
-  cout << MaxSubMatSum(mat, n, m);
+  cout << max_sub_mat_sum(v, n, m) << '\n';
   return 0;
 }

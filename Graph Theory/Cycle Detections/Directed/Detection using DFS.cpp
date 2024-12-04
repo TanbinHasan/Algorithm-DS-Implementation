@@ -8,12 +8,7 @@ class Graph {
   vector<vector<int>> g;
  public:
   vector<int> par, col;
-  Graph(int _n) {
-    n = _n;
-    g.resize(n);
-    par.resize(n);
-    col.resize(n);
-  }
+  Graph(int n) : n(n), g(n), par(n), col(n) {}
   void add(int u, int v) { g[u].push_back(v); }
 
   int start, end;

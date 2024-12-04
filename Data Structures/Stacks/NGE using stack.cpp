@@ -8,11 +8,11 @@
 
 using namespace std;
 
-vector<int> NGE(vector<int> &ar, int n) {
+vector<int> NGE(vector<int>& a, int n) {
   vector<int> res(n);
   stack<int> s;
   for (int i = n - 1; i >= 0; --i) {
-    while (!s.empty() && ar[i] >= ar[s.top()]) s.pop();
+    while (!s.empty() && a[i] >= a[s.top()]) s.pop();
     res[i] = ((s.empty()) ? (-1) : (s.top()));
     s.push(i);
   }

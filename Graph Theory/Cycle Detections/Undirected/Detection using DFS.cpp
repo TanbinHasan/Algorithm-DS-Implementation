@@ -7,14 +7,10 @@ class Graph {
   int n;
   vector<vector<int>> g;
   vector<int> par;
+
  public:
   vector<bool> vis;
-  Graph(int _n) {
-    n = _n;
-    g.resize(n);
-    vis.resize(n);
-    par.resize(n);
-  }
+  Graph(int n) : n(n), g(n), vis(n), par(n) {}
   void add(int u, int v) { g[u].push_back(v); }
 
   int start, end;
@@ -23,7 +19,7 @@ class Graph {
     par[u] = p;
     for (auto v : g[u]) {
       if (v == p) continue;
-      if (vis[v]) { // cycle contains u to v
+      if (vis[v]) {  // cycle contains u to v
         start = v, end = u;
         return true;
       }
@@ -48,7 +44,7 @@ class Graph {
 int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int n, m; // nodes, edges
+  int n, m;  // nodes, edges
   cin >> n >> m;
   Graph g(n);
   while (m--) {

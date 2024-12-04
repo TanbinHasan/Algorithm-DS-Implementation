@@ -3,16 +3,16 @@ using namespace std;
 
 class Graph {
   vector<vector<int>> g;
-  int diameter, MaxDis, FarNode;
+  int diameter, mxdis, farnode;
  public:
-  Graph(int n) : g(n), diameter(0), MaxDis(0), FarNode(0) {}
+  Graph(int n) : g(n), diameter(0), mxdis(0), farnode(0) {}
   void add(int u, int v) { g[u].push_back(v); }
 
   void dfs(int u, int d, int p = -1) {
-    if (d > MaxDis) {
-      MaxDis = d;
-      FarNode = u;
-      diameter = max(diameter, MaxDis);
+    if (d > mxdis) {
+      mxdis = d;
+      farnode = u;
+      diameter = max(diameter, mxdis);
     }
     for (auto& v : g[u]) {
       if (v == p) continue;
@@ -20,9 +20,9 @@ class Graph {
     }
   }
 
-  int FindDiameter(void) {
+  int diameter_len(void) {
     dfs(0, 0);
-    dfs(FarNode, 0);
+    dfs(farnode, 0);
     return diameter;
   }
 };
@@ -39,7 +39,7 @@ int main(void) {
     --u, --v;
     g.add(u, v), g.add(v, u);
   }
-  cout << g.FindDiameter() << '\n';
+  cout << g.diameter_len() << '\n';
   return 0;
 }
 /*

@@ -7,18 +7,19 @@ using namespace std;
 vector<vector<int>> ans;
 vector<int> v;
 vector<bool> vis;
-void Rec(vector<vector<int>> &adj, int n) {
+
+void Rec(vector<vector<int>>& g, int n) {
   if ((int)v.size() == n) {
     ans.push_back(v);
     return;
   }
   for (int i = 0; i < n; ++i) {
     if (vis[i]) continue;
-    for (auto &child : adj[i])
+    for (auto &child : g[i])
       if (vis[child]) return; // has dependency
     vis[i] = true;
     v.push_back(i);
-    Rec(adj, n);
+    Rec(g, n);
     vis[i] = false;
     v.pop_back();
   }

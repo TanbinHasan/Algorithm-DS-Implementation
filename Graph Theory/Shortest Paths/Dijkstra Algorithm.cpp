@@ -3,16 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int INF = (int)1e9;
+
 class Graph {
   int n;
   vector<vector<pair<int, int>>> g; // node, weight
   vector<int> dis;
  public:
-  Graph(int _n) {
-    n = _n;
-    g.resize(n);
-    dis.assign(n, numeric_limits<int>::max());
-  }
+  Graph(int n) : n(n), g(n), dis(n, INF) {}
   void add(int u, int v, int w) { g[u].push_back({v, w}); }
 
   vector<int> dijkstra(int s) { // s = source

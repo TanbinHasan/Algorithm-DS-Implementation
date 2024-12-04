@@ -3,61 +3,60 @@
  *    created: 18.09.2021 11:52:39
 **/
 #include <bits/stdc++.h>
- 
 using namespace std;
 
-vector<vector<int>> adj;
-vector<int> down, up, ans;
-void dec(int n) {
-  adj = vector<vector<int>>(n + 1);
-  down = vector<int>(n + 1);
-  up = vector<int>(n + 1);
-  ans = vector<int>(n + 1);
-}
+class Graph {
+  int n;
+  vector<vector<int>> g;
+  vector<int> down, up;
 
-void DFS1(int node, int par) {
-  down[node] = 0;
-  for (auto &child : adj[node]) {
-    if (child == par) continue;
-    DFS1(child, node);
-    down[node] = max(down[node], down[child] + 1);
-  }
-}
+ public:
+  vector<int> ans;
+  Graph(int n) : g(n), down(n), up(n), ans(n) {}
+  void add(int u, int v) { g[u].push_back(v); }
 
-void DFS2(int node, int par) {
-  int mx1(-1), mx2(-1);
-  for (auto &child : adj[node]) {
-    if (child == par) continue;
-    if (down[child] >= mx1) mx2 = mx1, mx1 = down[child];
-    else mx2 = max(mx2, down[child]);
+  void dfs1(int u, int par = -1) {
+    down[u] = 0;
+    for (auto &v : g[u]) {
+      if (v == par) continue;
+      dfs1(v, u);
+      down[u] = max(down[u], down[v] + 1);
+    }
   }
-  for (auto &child : adj[node]) {
-    if (child == par) continue;
-    if (mx1 == down[child]) up[child] = max(1 + up[node], 2 + mx2);
-    else up[child] = max(1 + up[node], 2 + mx1);
-    DFS2(child, node);
+
+  void dfs2(int u, int par = -1) {
+    int mx1 = -1, mx2 = -1;
+    for (auto& v : g[u]) {
+      if (v == par) continue;
+      if (down[v] >= mx1) mx2 = mx1, mx1 = down[v];
+      else mx2 = max(mx2, down[v]);
+    }
+    for (auto& v : g[u]) {
+      if (v == par) continue;
+      if (mx1 == down[v]) up[v] = max(1 + up[u], 2 + mx2);
+      else up[v] = max(1 + up[u], 2 + mx1);
+      dfs2(v, u);
+    }
+    ans[u] = max(down[u], up[u]);
   }
-  ans[node] = max(down[node], up[node]);
-}
-/*
-From main function:
-  DFS1(1, -1);
-  DFS2(1, -1);
-*/
+};
 
 int main(void) {
-  ios::sync_with_stdio(false); cin.tie(0);
-  int nodes;
-  cin >> nodes;
-  for (int i = 1; i < nodes; ++i) {
-    int x, y;
-    cin >> x >> y;
-    adj[x].push_back(y), adj[y].push_back(x);
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  int n;
+  cin >> n;
+  Graph g(n);
+  for (int i = 1; i < n; ++i) {
+    int u, v;
+    cin >> u >> v;
+    --u, --v;
+    g.add(u, v), g.add(v, u);
   }
-  DFS1(1, -1);
-  DFS2(1, -1);
-  for (int i = 1; i <= nodes; ++i) {
-    cout << ans[i] << ' ';
+  g.dfs1(0);
+  g.dfs2(0);
+  for (int i = 0; i < n; ++i) {
+    cout << g.ans[i] << " \n"[i == n - 1];
   }
   return 0;
 }

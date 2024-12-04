@@ -9,12 +9,7 @@ class Graph {
   vector<int> par;
  public:
   vector<bool> vis;
-  Graph(int _n) {
-    n = _n;
-    g.resize(n);
-    vis.resize(n);
-    par.assign(n, -1);
-  }
+  Graph(int n) : n(n), g(n), vis(n), par(n, -1) {}
   void add(int u, int v) { g[u].push_back(v); }
 
   bool iscyclic(int s) {

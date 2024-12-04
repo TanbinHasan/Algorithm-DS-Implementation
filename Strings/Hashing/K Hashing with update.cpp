@@ -8,7 +8,6 @@ using HH = array<H, 2>;
 const H MOD = {127657753, 987654319, 1000000007};  // use K moduli
 const H B = {137, 277, 37};                        // use K bases
 H P[MX], IP[MX];                                   // power of base and inverse bases
-bool ISCALC;
 
 H operator+(H a, H b) {
   H res;
@@ -45,22 +44,11 @@ int power(int b, int p, int mod) {
 }
 
 class Hashing {
-  bool BasePowerCalculation(void) {
-    H IB;
-    for (int i = 0; i < K; ++i) IB[i] = power(B[i], MOD[i] - 2, MOD[i]);
-    P[0] = IP[0] = {1, 1};
-    for (int i = 1; i < MX; ++i) {
-      P[i] = P[i - 1] * B;
-      IP[i] = IP[i - 1] * IB;
-    }
-    return true;
-  }
   int n;
   vector<HH> h;                                                            // (normal, rev) hash
   HH CH(char c, int i) { return {P[i] * (int)c, P[n - 1 - i] * (int)c}; }  // current hash value
  public:
   Hashing(string s) {
-    if (!ISCALC) ISCALC = BasePowerCalculation();
     n = (int)s.size();
     h.resize(2 * n);
     for (int i = n; i < 2 * n; ++i) h[i] = CH(s[i - n], i - n);
@@ -82,7 +70,15 @@ class Hashing {
   H concat(H h1, H h2, int sizeof_Hash1) { return h1 + h2 * P[sizeof_Hash1]; }
 };
 
-void PreCalculation(void) {}
+void PreCalculation(void) {
+  H IB;
+  for (int i = 0; i < K; ++i) IB[i] = power(B[i], MOD[i] - 2, MOD[i]);
+  P[0] = IP[0] = {1, 1};
+  for (int i = 1; i < MX; ++i) {
+    P[i] = P[i - 1] * B;
+    IP[i] = IP[i - 1] * IB;
+  }
+}
 
 // #define MultipleCase
 void Solve(int tc) {

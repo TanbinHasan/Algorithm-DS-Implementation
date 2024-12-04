@@ -10,12 +10,7 @@ class Graph {
   vector<vector<int>> g;
   vector<bool> vis, col;
  public:
-  Graph(int _n) {
-    n = _n;
-    g.resize(n);
-    vis.resize(n);
-    col.resize(n);
-  }
+  Graph(int n) : n(n), g(n), vis(n), col(n) {}
   void add(int u, int v) { g[u].push_back(v); }
 
   bool bipartite(int s) {

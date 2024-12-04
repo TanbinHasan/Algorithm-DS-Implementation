@@ -2,8 +2,10 @@
 
 using namespace std;
 
+const int INF = (int)1e9;
+
 int MST(vector<vector<pair<int,int>>> &adj, int n) {
-  vector<int> mn(n, numeric_limits<int32_t>::max());
+  vector<int> mn(n, INF);
   int ans = 0;
   mn[0] = 0;
   set<pair<int,int>> q;

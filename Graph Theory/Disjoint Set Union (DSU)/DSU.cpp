@@ -4,16 +4,16 @@ using namespace std;
 class DSU {
  public:
   vector<int> par, size;
-  DSU(int n) {
-    for (int i = 0; i < n; ++i) par.push_back(i);
-    size = vector<int>(n, 1);
-  }
+  DSU(int n) : par(n), size(n, 1) { iota(par.begin(), par.end(), 0); }
+
   // get representive of the component
   int get(int u) {
     while (par[u] != u) u = par[u];
     return u;
   }
+
   bool same(int u, int v) { return get(u) == get(v); }
+  
   bool unite(int u, int v) {
     u = get(u);
     v = get(v);
