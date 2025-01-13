@@ -7,70 +7,76 @@ using namespace std;
 
 typedef long long int i64;
 
-class Trie {
-  class node {
-   public:
-    bool endmark;
-    int cnt;
-    node* next[26] = {};
-    node() {
-      endmark = false;
-      cnt = 0;
-    }
-  };
-  node* head;
-  void destroy(node* cur) {
-    if (!cur) return;
-    for (auto nxt : cur->next) destroy(nxt);
-    delete (cur);
-  }
- public:
-  Trie() { head = new node(); }
-  ~Trie() { destroy(head); }
+const int MX = 10; // total number of characters
 
-  int cval(char ch) { return ch - 'a'; }
+class Node {
+  public:
+  bool endmark;
+  int cnt;
+  Node* nxt[MX] = {};
+  Node() : endmark(false), cnt(0) {}
+};
+
+class Trie {
+  void clear(Node* at) {
+    if (!at) return;
+    for (auto i : at->nxt) clear(i);
+    delete at;
+  }
+
+  int index(char ch) { 
+    if (islower(ch)) return ch - 'a';
+    if (isupper(ch)) return ch - 'A';
+    if (isdigit(ch)) return ch - '0';
+  }
+
+  Node* root;
+
+ public:
+  Trie() { root = new Node(); }
+  ~Trie() { clear(root); }
 
   void insert(string s) {
-    node* cur = head;
+    Node* at = root;
     for (auto& i : s) {
-      int ch = cval(i);
-      if (!cur->next[ch]) cur->next[ch] = new node();
-      cur = cur->next[ch];
-      ++cur->cnt;
+      int ch = index(i);
+      if (!at->nxt[ch]) at->nxt[ch] = new Node();
+      at = at->nxt[ch];
+      ++at->cnt;
     }
-    cur->endmark = true;
+    at->endmark = true;
   }
 
   bool find(string s) {
-    node* cur = head;
+    Node* at = root;
     for (auto& i : s) {
-      int ch = cval(i);
-      if (!cur->next[ch]) return false; // if null pointer
-      cur = cur->next[ch];
+      int ch = index(i);
+      if (!at->nxt[ch]) return false; // if null pointer
+      at = at->nxt[ch];
     }
-    return cur->endmark;
+    return at->endmark;
   }
 
   void erase(string s) {
     if (!find(s)) return;
-    node* cur = head;
+    Node* at = root;
     for (auto& i : s) {
-      int ch = cval(i);
-      cur = cur->next[ch];
-      --cur->cnt;
+      int ch = index(i);
+      at = at->nxt[ch];
+      --at->cnt;
     }
-    if (!cur->cnt) cur->endmark = false;
+    if (!at->cnt) at->endmark = false;
   }
 
   vector<int> frequency(string s) {
-    node* cur = head;
+    Node* at = root;
     int n = (int)s.size();
     vector<int> v(n);
     for (int i = 0; i < n; ++i) {
-      int ch = cval(s[i]);
-      if (!cur->next[ch]) break;
-      cur = cur->next[ch];
-      v[i] = cur->cnt;
+      int ch = index(s[i]);
+      if (!at->nxt[ch]) break;
+      at = at->nxt[ch];
+      v[i] = at->cnt;
     }
     return v;
   }
@@ -79,47 +85,47 @@ class Trie {
 int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  Trie trie;
-  trie.insert("apple");
-  trie.insert("apple");
-  trie.insert("app");
-  trie.insert("banana");
-  trie.insert("banana");
-  trie.insert("banana");
-  trie.insert("cat");
-  trie.insert("cat");
-  trie.insert("cat");
-  trie.insert("cat");
-  trie.insert("dog");
-  trie.erase("cat");
-  trie.erase("cat");
-  trie.insert("cat");
-  trie.insert("cat");
-  trie.insert("cat");
-  trie.insert("cat");
-  trie.erase("banana");
-  trie.erase("banana");
-  trie.erase("banana");
-  cout << "apple: " << trie.find("apple") << '\n';
-  for (auto& i : trie.frequency("apple")) {
+  Trie t;
+  t.insert("apple");
+  t.insert("apple");
+  t.insert("app");
+  t.insert("banana");
+  t.insert("banana");
+  t.insert("banana");
+  t.insert("cat");
+  t.insert("cat");
+  t.insert("cat");
+  t.insert("cat");
+  t.insert("dog");
+  t.erase("cat");
+  t.erase("cat");
+  t.insert("cat");
+  t.insert("cat");
+  t.insert("cat");
+  t.insert("cat");
+  t.erase("banana");
+  t.erase("banana");
+  t.erase("banana");
+  cout << "apple: " << t.find("apple") << '\n';
+  for (auto& i : t.frequency("apple")) {
     cout << i << " ";
   }
   cout << '\n';
 
-  cout << "banana: " << trie.find("banana") << '\n';
-  for (auto& i : trie.frequency("banana")) {
+  cout << "banana: " << t.find("banana") << '\n';
+  for (auto& i : t.frequency("banana")) {
     cout << i << " ";
   }
   cout << '\n';
 
-  cout << "cat: " << trie.find("cat") << '\n';
-  for (auto& i : trie.frequency("cat")) {
+  cout << "cat: " << t.find("cat") << '\n';
+  for (auto& i : t.frequency("cat")) {
     cout << i << " ";
   }
   cout << '\n';
 
-  cout << "dog: " << trie.find("dog") << '\n';
-  for (auto& i : trie.frequency("dog")) {
+  cout << "dog: " << t.find("dog") << '\n';
+  for (auto& i : t.frequency("dog")) {
     cout << i << " ";
   }
   cout << '\n';

@@ -7,64 +7,71 @@ using namespace std;
 
 typedef long long int i64;
 
-const int N = 50000; // size of the array
-const int M = 50; // max size/bit of each element of array
-const int K = 26; // total number of characters
-int cval(char ch) { return ch - 'a'; } // Type of characters
-int nexts[N * M][K];
+const int N = 50000;  // size of the array
+const int M = 50;     // max size/bit of each element of array
+const int K = 26;     // total number of characters
+
+int nxt[N * M][K];
 int cnt[N * M];
-bitset<N * M> endmark;
-int node_cnt;
+bool endmark[N * M];
 
 class Trie {
+  int node_at;
+  
+  int index(char ch) {  // type of chars
+    if (islower(ch)) return ch - 'a';
+    if (isupper(ch)) return ch - 'A';
+    if (isdigit(ch)) return ch - '0';
+    throw invalid_argument("Invalid");
+  }
+
  public:
-  Trie() {
-    endmark.reset();
+  Trie() : node_at(0) {
     memset(cnt, 0, sizeof cnt);
-    memset(nexts, -1, sizeof nexts);
-    node_cnt = 0;
+    memset(nxt, -1, sizeof nxt);
+    memset(endmark, false, sizeof endmark);
   }
 
   void insert(string s) {
-    int cur = 0; // start from the root
+    int at = 0;  // start from the root
     for (auto& i : s) {
-      int ch = cval(i);
-      if (nexts[cur][ch] == -1)  nexts[cur][ch] = ++node_cnt;
-      cur = nexts[cur][ch];
-      ++cnt[cur];
+      int ch = index(i);
+      if (nxt[at][ch] == -1) nxt[at][ch] = ++node_at;
+      at = nxt[at][ch];
+      ++cnt[at];
     }
-    endmark[cur] = 1;
+    endmark[at] = 1;
   }
 
   bool find(string s) {
-    int cur = 0;
+    int at = 0;
     for (auto& i : s) {
-      int ch = cval(i);
-      if (nexts[cur][ch] == -1) return false;
-      cur = nexts[cur][ch];
+      int ch = index(i);
+      if (nxt[at][ch] == -1) return false;
+      at = nxt[at][ch];
     }
-    return endmark[cur];
+    return endmark[at];
   }
 
   void erase(string s) {
     if (!find(s)) return;
-    int cur = 0;
+    int at = 0;
     for (auto& i : s) {
-      int ch = cval(i);
-      cur = nexts[cur][ch];
-      --cnt[cur];
+      int ch = index(i);
+      at = nxt[at][ch];
+      --cnt[at];
     }
-    if (!cnt[cur]) endmark[cur] = 0;
+    if (!cnt[at]) endmark[at] = 0;
   }
 
   vector<int> frequency(string s) {
-    int n = (int)s.size(), cur = 0;
+    int at = 0, n = (int)s.size();
     vector<int> v(n);
     for (int i = 0; i < n; ++i) {
-      int ch = cval(s[i]);
-      if (nexts[cur][ch] == -1) break;
-      cur = nexts[cur][ch];
-      v[i] = cnt[cur];
+      int ch = index(s[i]);
+      if (nxt[at][ch] == -1) break;
+      at = nxt[at][ch];
+      v[i] = cnt[at];
     }
     return v;
   }
@@ -74,7 +81,7 @@ int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
   Trie trie;
-  trie.insert("apple");
+  trie.insert("appl#");
   trie.insert("apple");
   trie.insert("app");
   trie.insert("banana");
