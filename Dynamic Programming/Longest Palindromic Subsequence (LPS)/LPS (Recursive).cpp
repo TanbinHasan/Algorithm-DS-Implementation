@@ -5,39 +5,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int INF = (int)1e9;
 const int MX = 1001;
+
 int dp[MX][MX];
-string s, r;
+string s;
 int n;
 
-int DP(int i, int j) {
-  if (i == n || j == n) return 0;
-  int& ret = dp[i][j];
+int lps(int l, int r) {
+  if (l > r || l == n || r == -1) return 0;
+  int& ret = dp[l][r];
   if (~ret) return ret;
-  if (s[i] == r[j]) ret = DP(i + 1, j + 1);
-  else ret = max(DP(i + 1, j), DP(i, j + 1));
+  if (s[l] == s[r]) ret = lps(l + 1, r - 1) + (l == r ? 1 : 2);
+  else ret = max(lps(l + 1, r), lps(l, r - 1));
   return ret;
 }
 
-string path;
-void DP_Path(int i, int j) {
-  if (i == n || j == n) return;
-  if (s[i] == r[j]) {
-    path.push_back(s[i]);
-    DP_Path(i + 1, j + 1);
-  } else if (DP(i + 1, j) >= DP(i, j + 1)) DP_Path(i + 1, j);
-  else DP_Path(i, j + 1);
-}
+// string path;
+// void walk(int i, int j) {
+//   if (i == n || j == n) return;
+//   if (s[i] == r[j]) {
+//     path.push_back(s[i]);
+//     walk(i + 1, j + 1);
+//   } else if (rec(i + 1, j) >= rec(i, j + 1)) walk(i + 1, j);
+//   else walk(i, j + 1);
+// }
 
 int main(void) {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  string s;
   cin >> s;
-  string r = s;
-  reverse(r.begin(), r.end());
   n = (int)s.size();
   memset(dp, -1, sizeof dp);
-  cout << DP(0, 0) << '\n';
+  cout << lps(0, n - 1) << '\n';
   return 0;
 }
+// https://toph.co/p/convert-string-into-palindrome

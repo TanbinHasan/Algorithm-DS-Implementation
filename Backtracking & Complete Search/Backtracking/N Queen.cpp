@@ -18,11 +18,11 @@ void rec(int n, int c) {
     return;
   }
   for (int i = 0; i < n; ++i) {
-    if (col[i] || ld[i + c] || rd[c - i + n - 1]) continue;
-    col[i] = ld[i + c] = rd[c - i + n - 1] = true;
+    if (col[i] || ld[i + c] || rd[i - c + n - 1]) continue;
+    col[i] = ld[i + c] = rd[i - c + n - 1] = true;
     v.push_back(i);
     rec(n, c + 1);
-    col[i] = ld[i + c] = rd[c - i + n - 1] = false;
+    col[i] = ld[i + c] = rd[i - c + n - 1] = false;
     v.pop_back();
   }
 }
